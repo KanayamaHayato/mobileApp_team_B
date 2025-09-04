@@ -115,4 +115,12 @@
         tools:layout_editor_absoluteX="79dp"
         tools:layout_editor_absoluteY="587dp" />
 
+    <Button
+        android:id="@+id/buttonCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="camera"
+        app:layout_constraintTop_toBottomOf="@id/buttonOpenFolders"
+        tools:layout_editor_absoluteX="238dp"
+        tools:layout_editor_absoluteY="587dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

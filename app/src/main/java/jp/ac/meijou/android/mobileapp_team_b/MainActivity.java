@@ -32,13 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         //カメラ起動（暗黙的）
-//        binding.button.setOnClickListener((view -> {
-//            var intent = new Intent();
-//
-//            intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-//            startActivity(intent);
-//
-//        }))
+        binding.buttonCamera.setOnClickListener((view -> {
+            var intent = new Intent();
+
+            intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+            startActivity(intent);
+
+        }));
 
         //画面遷移（FolderActivity）
         binding.buttonOpenFolders.setOnClickListener(v ->
