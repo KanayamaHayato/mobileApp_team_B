@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">mobileApp_team_B</string>
+    <string name="test045">テストメッセージ</string>
+    <string name="testByOsoso">Hello test by Ososo</string>
 </resources>
