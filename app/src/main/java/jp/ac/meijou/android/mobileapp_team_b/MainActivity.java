@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
             binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
             binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
+            EditText searchEditText = binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text);
 
 
             tabTextColor = ContextCompat.getColor(this, R.color.dark_text);
