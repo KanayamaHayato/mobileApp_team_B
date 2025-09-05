@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         }));
 
         //画面遷移（FolderActivity）
-        binding.buttonOpenFolders.setOnClickListener(v ->
-                startActivity(new Intent(this, FolderActivity.class))
-        );
+        //binding.buttonOpenFolders.setOnClickListener(v ->
+                //startActivity(new Intent(this, FolderActivity.class))
+        //);
     }
 }
