@@ -44,11 +44,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
 
         }));
-
+        /*
         //画面遷移（FolderActivity）
         binding.buttonOpenFolders.setOnClickListener(v ->
                 startActivity(new Intent(this, FolderActivity.class))
         );
+
+         */
 
 
         // ダークモード
@@ -79,6 +81,27 @@ public class MainActivity extends AppCompatActivity {
             binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
         }
         });
+        binding.viewPager.setAdapter(new MainPagerAdapter(this));
 
+        new com.google.android.material.tabs.TabLayoutMediator(
+                binding.tabLayout,
+                binding.viewPager,
+                (tab, position) -> {
+                    switch (position) {
+                        case 0: tab.setText("カテゴリ"); break;
+                        case 1: tab.setText("最近使用した..."); break;
+                        default: tab.setText("その他"); break;
+                    }
+                }
+        ).attach();
+    }
+    static class MainPagerAdapter extends androidx.viewpager2.adapter.FragmentStateAdapter {
+        public MainPagerAdapter(AppCompatActivity activity) { super(activity); }
+        @Override public int getItemCount() { return 3; }
+        @Override public androidx.fragment.app.Fragment createFragment(int position) {
+            if (position == 0) return new FolderFragment();   // ← ココがカテゴリ
+            else if (position == 1) return new RecentFragment(); // ダミーでもOK
+            else return new OtherFragment();                    // ダミーでもOK
+        }
     }
 }
