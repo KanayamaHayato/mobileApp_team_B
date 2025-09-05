@@ -10,4 +10,5 @@
     <color name="dark_text">#E6E6E6</color>
     <color name="tab_text_color">#888888</color>
     <color name="light_title_background">#E1FFC5</color>
+    <color name="bucket_background">#C8FFA7</color>
 </resources>
