@@ -1,11 +1,15 @@
 package jp.ac.meijou.android.mobileapp_team_b;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.widget.ImageView;
+import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -44,5 +48,35 @@ public class MainActivity extends AppCompatActivity {
         binding.buttonOpenFolders.setOnClickListener(v ->
                 startActivity(new Intent(this, FolderActivity.class))
         );
+
+
+        // ダークモード
+        binding.switch3.setOnClickListener(v ->{
+        boolean isChecked = binding.switch3.isChecked();
+        int tabTextColor;
+
+        if (isChecked) {
+            // ダークモードに切り替え
+            binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
+            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
+            binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
+            binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
+
+
+            tabTextColor = ContextCompat.getColor(this, R.color.dark_text);
+            binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
+        } else {
+            // ライトモードに戻す
+            binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
+            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.light_text));
+            binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
+            binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.light_text));
+
+
+            tabTextColor = ContextCompat.getColor(this, R.color.light_text);
+            binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
+        }
+        });
+
     }
 }
