@@ -79,6 +79,5 @@ public class MainActivity extends AppCompatActivity {
             binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
         }
         });
-
     }
 }
