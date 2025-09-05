@@ -1,6 +1,7 @@
 package jp.ac.meijou.android.mobileapp_team_b;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,7 +49,12 @@ public class FolderActivity extends AppCompatActivity {
 
         //RecyclerView 初期化
         adapter = new BucketAdapter(this, data, bucket -> {
-            //バケツをタップしたらフォルダ内グリッドへ遷移するようにする（未実装）
+            //バケツをタップしたらフォルダ内グリッドへ遷移するようにする（実装済）
+            Intent i = new Intent(this, PhotoGridActivity.class);
+            // ↓Bucketのフィールド名はあなたの定義に合わせて（例：bucketId / bucketName）
+            i.putExtra("bucketId", bucket.bucketId);
+            i.putExtra("bucketName", bucket.bucketName);
+            startActivity(i);
         });
         RecyclerView recycler = binding.recyclerBuckets;
         recycler.setLayoutManager(new LinearLayoutManager(this));
