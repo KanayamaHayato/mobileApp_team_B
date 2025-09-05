@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="229dp"
         tools:layout_editor_absoluteY="366dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -21,7 +22,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="58dp"
         tools:layout_editor_absoluteY="366dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -29,7 +31,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="58dp"
         tools:layout_editor_absoluteY="212dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
@@ -84,7 +87,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="229dp"
         tools:layout_editor_absoluteY="212dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <TextClock
         android:id="@+id/textClock2"
@@ -112,15 +116,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="openFolder"
-        tools:layout_editor_absoluteX="79dp"
-        tools:layout_editor_absoluteY="587dp" />
+        app:layout_constraintBottom_toBottomOf="@id/buttonCamera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonCamera"/>
 
     <Button
         android:id="@+id/buttonCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="camera"
-        app:layout_constraintTop_toBottomOf="@id/buttonOpenFolders"
-        tools:layout_editor_absoluteX="238dp"
-        tools:layout_editor_absoluteY="587dp" />
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/switch3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonOpenFolders"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
