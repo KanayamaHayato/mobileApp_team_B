@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         if (isChecked) {
             // ダークモードに切り替え
             binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
-            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
+//            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.dark_text)); // アプリ名は変えないように
             binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
             binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
             EditText searchEditText = binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // ライトモードに戻す
             binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
-            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.light_text));
+//            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.light_text));
             binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
             binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.light_text));
 
