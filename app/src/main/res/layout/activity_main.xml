@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="229dp"
         tools:layout_editor_absoluteY="366dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -24,7 +25,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="58dp"
         tools:layout_editor_absoluteY="366dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -32,7 +34,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="58dp"
         tools:layout_editor_absoluteY="212dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
@@ -110,7 +113,8 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="229dp"
         tools:layout_editor_absoluteY="212dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="MissingConstraints" />
 
     <Switch
         android:id="@+id/switch3"
@@ -121,12 +125,27 @@
         android:text="ダークモード"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
     <Button
         android:id="@+id/buttonCamera"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="camera"
-        tools:layout_editor_absoluteX="238dp"
-        tools:layout_editor_absoluteY="635dp" />
+
+        android:backgroundTint="#664FA3"
+        android:layout_marginBottom="30dp"
+
+        android:text="  Camera  "
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+
+        app:cornerRadius="25dp"
+        app:strokeColor="#8A70BA"
+        app:strokeWidth="2dp"
+
+        app:icon="@drawable/camera"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/switch3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="#E6E2EF" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
