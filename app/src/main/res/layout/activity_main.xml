@@ -102,17 +102,6 @@
         tools:layout_editor_absoluteY="212dp"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextClock
-        android:id="@+id/textClock2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
     <Switch
         android:id="@+id/switch3"
         android:layout_width="wrap_content"
