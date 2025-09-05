@@ -83,4 +83,5 @@ public class FolderFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }
