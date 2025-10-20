@@ -27,13 +27,7 @@
         android:theme="@style/Theme.MobileApp_team_B">
         <activity
             android:name=".AiTest"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+            android:exported="true" />
 
         <activity
             android:name=".PhotoGridActivity"
@@ -45,6 +39,11 @@
             android:name=".MainActivity"
             android:exported="true">
 <!--            あとでここに戻す-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

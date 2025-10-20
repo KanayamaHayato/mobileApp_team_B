@@ -52,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
          */
 
+        // aiTestボタンを推したらテストページに移動するように
+        // activity_main.xmlファイルと同様，不要になったら消して下さい
+        binding.aiTestButton.setOnClickListener((view -> {
+            var intent = new Intent(this, AiTest.class);
+            startActivity(intent);
+        }));
+
 
         // ダークモード
         binding.switch3.setOnClickListener(v ->{
