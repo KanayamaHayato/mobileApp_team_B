@@ -16,7 +16,10 @@ import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.task.vision.classifier.Classifications;
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.meijou.android.mobileapp_team_b.databinding.ActivityAiTestBinding;
@@ -27,6 +30,7 @@ public class AiTest extends AppCompatActivity {
     private ActivityAiTestBinding binding;
     private ImageClassifier imageClassifier;
     private ConnectivityManager connectivityManager;
+    private List<String> labels; // ラベル一覧を保持する変数
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,8 @@ public class AiTest extends AppCompatActivity {
         binding = ActivityAiTestBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // ラベル読み込み
+        loadLabels();
 
         // EfficientNet モデルをロード
         try {
@@ -57,9 +63,25 @@ public class AiTest extends AppCompatActivity {
         });
     }
 
+    // ラベルファイルを読み込むコードを追加
+    private void loadLabels() {
+        labels = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(getAssets().open("labels.txt")));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                labels.add(line);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void classifyImage() {
         // Drawable から画像を取得
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample3);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample4); // ここの画像名を変えれば別のサンプルを分析できる
 
         // Bitmap を TensorImage に変換
         TensorImage image = TensorImage.fromBitmap(bitmap);
@@ -73,9 +95,10 @@ public class AiTest extends AppCompatActivity {
             List<Category> categories = results.get(0).getCategories();
             if (categories != null && categories.size() > 0) {
                 Category topResult = categories.get(0);
-                String label = topResult.getLabel();
-                float score = topResult.getScore();
-                String resultText = "予測: " + label + "\n信頼度: " + (score * 100) + " %";
+                int labelIndex = topResult.getIndex();  // クラスID（例：836）
+                String labelName = labels.get(labelIndex); // ラベル名（例：sundial）
+                float score = topResult.getScore(); // 信頼度 (例：33.984375%)
+                String resultText = "予測: " + labelIndex + "," + labelName + "\n信頼度: " + (score * 100) + " %";
                 binding.AISampleResultText.setText(resultText);
             } else {
                 binding.AISampleResultText.setText("分類結果なし");
