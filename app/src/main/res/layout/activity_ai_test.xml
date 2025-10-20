@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/AISampleButton"
-        app:srcCompat="@drawable/sample" />
+        app:srcCompat="@drawable/sample5" />
 
     <TextView
         android:id="@+id/AISampleResultText"

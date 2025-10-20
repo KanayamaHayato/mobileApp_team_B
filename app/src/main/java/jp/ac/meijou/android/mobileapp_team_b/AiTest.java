@@ -81,7 +81,7 @@ public class AiTest extends AppCompatActivity {
 
     private void classifyImage() {
         // Drawable から画像を取得
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample); // ここの画像名を変えれば別のサンプルを分析できる
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample5); // ここの画像名を変えれば別のサンプルを分析できる
 
         // Bitmap を TensorImage に変換
         TensorImage image = TensorImage.fromBitmap(bitmap);
