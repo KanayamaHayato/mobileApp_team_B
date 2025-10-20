@@ -9,6 +9,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.tensorflow.lite.task.vision.classifier.ImageClassifier;
+
 import java.io.IOException;
 
 import jp.ac.meijou.android.mobileapp_team_b.databinding.ActivityAiTestBinding;
@@ -47,5 +49,9 @@ public class AiTest extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void classifyImage() {
+
     }
 }

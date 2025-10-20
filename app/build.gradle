@@ -53,5 +53,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "com.google.android.material:material:1.12.0"
 
+//    TFLite の依存関係を追加
+    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.4'
 
 }
