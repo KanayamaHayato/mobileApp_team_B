@@ -148,4 +148,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:rippleColor="#E6E2EF" />
 
+<!--    AIの動作を確認するためのページに飛ぶボタンです　不要になったら消して下さい-->
+    <Button
+        android:id="@+id/aiTestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AITest"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+         />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

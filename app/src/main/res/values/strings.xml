@@ -3,7 +3,7 @@
     <string name="test045">テストメッセージ</string>
     <string name="testByOsoso">Hello test by Ososo</string>
 
-<!--    ダークモード用-->
+    <!--    ダークモード用-->
     <color name="light_background">#FFFFFF</color>
     <color name="dark_background">#333333</color>
     <color name="light_text">#282828</color>
