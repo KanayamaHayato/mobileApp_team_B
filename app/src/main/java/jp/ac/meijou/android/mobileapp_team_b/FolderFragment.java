@@ -120,17 +120,19 @@ public class FolderFragment extends Fragment {
         File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File newFolder = new File(picturesDir, folderName);
 
-        // フォルダを作成する
-        boolean isSuccess = false;
+        // フォルダが存在しない場合のみ、新規作成する
         if (!newFolder.exists()) {
-            isSuccess = newFolder.mkdirs(); // ディレクトリ作成
-        } else {
-            Toast.makeText(requireContext(), "既に存在します", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (isSuccess) {
+            boolean created = newFolder.mkdirs();
+            if (!created) {
+                Toast.makeText(requireContext(), "フォルダ作成に失敗しました", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Toast.makeText(requireContext(), "作成しました: " + folderName, Toast.LENGTH_SHORT).show();
+
+            // 空のフォルダを作成した後，再起動等で表示されなくなった時(returnせずに下へ行くことで表示させる)
+        } else {
+            Toast.makeText(requireContext(), "既存のフォルダを表示します", Toast.LENGTH_SHORT).show();
+        }
 
             //  画面のリストに手動で追加する
             // (注意: 画像がないのでMediaStoreからは自動で読み込まれないため、手動でBucketを作って足す)
@@ -144,8 +146,6 @@ public class FolderFragment extends Fragment {
             adapter.notifyItemInserted(0); // 画面更新
             binding.recyclerBuckets.scrollToPosition(0); // 一番上までスクロール
 
-        } else {
-            Toast.makeText(requireContext(), "作成に失敗しました", Toast.LENGTH_SHORT).show();
-        }
+
     }
 }
