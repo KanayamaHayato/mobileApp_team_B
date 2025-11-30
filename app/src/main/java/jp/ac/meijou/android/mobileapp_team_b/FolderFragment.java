@@ -28,6 +28,7 @@ public class FolderFragment extends Fragment {
     private final List<Bucket> data = new ArrayList<>();
     private BucketAdapter adapter;
 
+    // どの権限が必要かを判断(バージョンによって違うため)
     private String readImagesPermission() {
         return Build.VERSION.SDK_INT >= 33
                 ? Manifest.permission.READ_MEDIA_IMAGES
@@ -59,12 +60,13 @@ public class FolderFragment extends Fragment {
         ensurePermissionAndLoad();
     }
 
+    // 必要な権限を持っているかを確認(無ければポップアップを出して要求)
     private void ensurePermissionAndLoad() {
         if (ContextCompat.checkSelfPermission(requireContext(), readImagesPermission())
                 == PackageManager.PERMISSION_GRANTED) {
             loadBuckets();
         } else {
-            reqReadPerm.launch(readImagesPermission());
+            reqReadPerm.launch(readImagesPermission()); // 画像を読み込む
         }
     }
 
