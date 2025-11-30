@@ -26,7 +26,7 @@ public class PhotoGridActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private PhotoAdapter adapter;
 
-    @Override
+    @Override // フォルダ一覧画面（FolderFragment）でタップされたフォルダの情報を受け取る
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         setContentView(R.layout.activity_photo_grid);
@@ -36,6 +36,7 @@ public class PhotoGridActivity extends AppCompatActivity {
         setTitle(bucketName == null ? "Photos" : bucketName);
 
         recycler = findViewById(R.id.recyclerPhotos);
+        // 3列のグリッド表示にする
         recycler.setLayoutManager(new GridLayoutManager(this, 3));
         adapter = new PhotoAdapter();
         recycler.setAdapter(adapter);
@@ -60,11 +61,13 @@ public class PhotoGridActivity extends AppCompatActivity {
         }).start();
     }
 
+    // 指定のフォルダIDとおなじ写真だけを持ってくる
     private List<Uri> queryPhotosInBucket(String bucketId) {
         Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String[] projection = new String[]{ MediaStore.Images.Media._ID };
         String selection = MediaStore.Images.Media.BUCKET_ID + "=?";
         String[] args = new String[]{ bucketId };
+        // 撮影日が新しい順 (DESC)
         String orderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
 
         List<Uri> result = new ArrayList<>();
@@ -85,10 +88,12 @@ public class PhotoGridActivity extends AppCompatActivity {
             ImageView img;
             VH(View v) { super(v); img = v.findViewById(R.id.img); }
         }
+        // ここで item_photo.xmlを読み込む
         @Override public VH onCreateViewHolder(ViewGroup p, int v) {
             View view = LayoutInflater.from(p.getContext()).inflate(R.layout.item_photo, p, false);
             return new VH(view);
         }
+
         @Override public void onBindViewHolder(VH h, int pos) {
             Uri uri = data.get(pos);
             Glide.with(h.img.getContext()).load(uri).centerCrop().into(h.img);
