@@ -142,8 +142,7 @@ public class PhotoGridActivity extends AppCompatActivity {
     // URIからファイル名を取得するメソッド
     private String getFileName(Uri uri){
         String result = null;
-        // データベース管理されたデータであることを確認
-        if (uri.getScheme().equals("content")){
+        if (uri.getScheme().equals("content")){ // データベース管理されたデータであることを確認
             try (Cursor cursor = getContentResolver().query(uri,
                     new String[]{MediaStore.Images.Media.DISPLAY_NAME},null, null, null)){
                 if (cursor != null && cursor.moveToFirst()){
@@ -206,80 +205,184 @@ public class PhotoGridActivity extends AppCompatActivity {
     }
 
     // 実際にファイルを移動させる処理
+    /**
+     * 画像ファイルを指定されたフォルダ(Bucket)へ移動させるメソッド
+     * * @param sourceUri    移動元(今ある写真)の場所データ
+     * @param targetBucket 移動先(ゴール)のフォルダ情報
+     * @param position     画面リスト上の何番目の写真か(移動成功後に画面から消すために必要)
+     */
     private void moveImageFile(Uri sourceUri, Bucket targetBucket, int position) {
+        // 移動が成功したかどうかを記録するフラグ（最初は false:失敗 にしておく）
         boolean success = false;
 
-        // A. Android 10 (API 29) 以上の場合: MediaStoreの情報を書き換える
+        // 元のファイル名を取得 (例: "cat.jpg")
+        String originalName = getFileName(sourceUri);
+        // 万が一名前が取れなかった場合の保険
+        if (originalName == null) originalName = "unknown.jpg";
+
+        // ====================================================================================
+        // 【分岐A】 Android 10 (API 29/Q) 以上の新しいスマホの場合
+        // 昔ながらのファイル移動が禁止されているため、データベース上の「住所書き換え」を行います。
+        // ====================================================================================
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             try {
+                // データベース更新用の入れ物を作成
                 ContentValues values = new ContentValues();
-                // 移動先のパスを指定 (例: Pictures/旅行)
-                // ※注: 最後に "/" を付けるのがルール
-                values.put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/" + targetBucket.bucketName + "/");
-                // 重要　移動先に同じ名前のファイルがある場合にはIS_PENDINGを使うべきだが，現段階では未実装
 
+                // 移動先のパスを作る (例: "Pictures/旅行/")
+                // ※最後に "/" を付けないとフォルダとして認識されないので注意
+                String targetPath = "Pictures/" + targetBucket.bucketName + "/";
 
+                // --- ▼ 重複チェック & リネーム処理 (ここから) ▼ ---
+                // 移動先に「cat.jpg」があったら「cat (1).jpg」にする処理
 
-                // データベースを更新 (これでファイルも自動的に移動する)
+                String finalName = originalName; // 最終的に使うファイル名
+
+                // 拡張子(.jpgなど)と、ファイル名本体(cat)を分離する
+                String nameNoExt = originalName.contains(".") ? originalName.substring(0, originalName.lastIndexOf('.')) : originalName;
+                String ext = originalName.contains(".") ? originalName.substring(originalName.lastIndexOf('.')) : "";
+
+                int counter = 1;
+                // isPhotoExists: そのフォルダに同じ名前のファイルはあるかをDBに聞く自作メソッド
+                // ある(true)と言われたら、カウンターを増やして名前を変えて再挑戦
+                while (isPhotoExists(targetPath, finalName)) {
+                    finalName = nameNoExt + " (" + counter + ")" + ext; // 例: cat (1).jpg
+                    counter++;
+                }
+                // --- ▲ 重複チェック & リネーム処理 (ここまで) ▲ ---
+
+                // 準備した変更内容をセットする
+                // 1. 新しい住所(パス)
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, targetPath);
+
+                // 2. 新しい名前 (もしリネームされていたらセット)
+                if (!finalName.equals(originalName)) {
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, finalName);
+                }
+
+                // 3. 更新日時を「今」にする (整理した順に並びやすくするため)
+                values.put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis() / 1000);
+
+                // ★ データベース更新実行！ (住所が変わるので実体も自動で移動される)
+                // update(...) は「変更できた件数」を返すので、1件以上なら成功
                 int rows = getContentResolver().update(sourceUri, values, null, null);
-
-                // 1行でも更新できれば成功
                 if (rows > 0) success = true;
 
             } catch (SecurityException e) {
-                // エラーが「許可を求めれば直るもの(Recoverable)」だった場合
+                // 【重要】権限エラーの処理
+                // 自分のアプリで撮った写真以外を動かそうとすると、ここでエラーが出る
+
                 if (e instanceof RecoverableSecurityException) {
+                    // 「ユーザーに許可をもらえば直るエラー」の場合
                     RecoverableSecurityException recoverable = (RecoverableSecurityException) e;
                     try {
-                        // システムの「許可しますか？」ダイアログを出す
-                        // (許可されたらもう一度長押しして移動する必要がある)
+                        // システム標準の「許可しますか？」ポップアップを出す
                         startIntentSenderForResult(
                                 recoverable.getUserAction().getActionIntent().getIntentSender(),
-                                100, // リクエストコード（適当な数字）
-                                null, 0, 0, 0, null);
+                                100, null, 0, 0, 0, null);
 
+                        // ここで一旦処理を終える（許可をもらった後、ユーザーにもう一度操作してもらう）
                         Toast.makeText(this, "許可をしてから、もう一度試してください", Toast.LENGTH_LONG).show();
-                        return; // ここで終了
+                        return;
                     } catch (IntentSender.SendIntentException sendEx) {
                         sendEx.printStackTrace();
                     }
                 }
 
-                // それ以外のエラー
-                Toast.makeText(this, "権限エラー: 移動できませんでした", Toast.LENGTH_SHORT).show();
+                // どうにもならないエラーの場合
                 e.printStackTrace();
+                Toast.makeText(this, "権限エラー: 移動できませんでした", Toast.LENGTH_SHORT).show();
                 return;
             } catch (Exception e) {
+                // その他の予期せぬエラー
                 e.printStackTrace();
             }
 
         } else {
-            // B. Android 9 (Pie) 以下の場合: 従来の File.renameTo を使う
-            String sourcePath = getPathFromUri(sourceUri);
-            if (sourcePath != null) {
-                File sourceFile = new File(sourcePath);
-                File targetDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), targetBucket.bucketName);
-                if (!targetDir.exists()) targetDir.mkdirs();
-                File destFile = new File(targetDir, sourceFile.getName());
+            // ====================================================================================
+            // 【分岐B】 Android 9 (API 28/Pie) 以下の古いスマホの場合
+            // 従来の「ファイルを直接つかんで移動させる」方法で行います。
+            // ====================================================================================
 
+            // URIから「/storage/emulated/0/...」のような実際のパスを取得
+            String sourcePath = getPathFromUri(sourceUri);
+
+            if (sourcePath != null) {
+                File sourceFile = new File(sourcePath); // 移動元のファイル
+
+                // 移動先のフォルダ場所 (例: Pictures/旅行)
+                File targetDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), targetBucket.bucketName);
+
+                // 移動先フォルダが物理的に無ければ作る(mkdirs)
+                if (!targetDir.exists()) targetDir.mkdirs();
+
+                // --- ▼ 重複チェック & リネーム処理 (ここから) ▼ ---
+                // 移動先フォルダの中に、同じ名前のファイルが「実際に存在するか」チェック
+
+                File destFile = new File(targetDir, sourceFile.getName()); // とりあえずそのままの名前で予定地作成
+
+                String nameNoExt = sourceFile.getName().contains(".") ? sourceFile.getName().substring(0, sourceFile.getName().lastIndexOf('.')) : sourceFile.getName();
+                String ext = sourceFile.getName().contains(".") ? sourceFile.getName().substring(sourceFile.getName().lastIndexOf('.')) : "";
+
+                int counter = 1;
+                // exists(): 物理的にファイルがあるか確認
+                while (destFile.exists()) {
+                    String newName = nameNoExt + " (" + counter + ")" + ext;
+                    destFile = new File(targetDir, newName); // 名前を変えて再チェック
+                    counter++;
+                }
+                // --- ▲ 重複チェック & リネーム処理 (ここまで) ▲ ---
+
+                // ★ ファイル移動実行！ (renameTo)
+                // 成功すると true が返ってくる
                 if (sourceFile.renameTo(destFile)) {
                     success = true;
-                    // 古いAndroidの場合はスキャンし直す必要がある
+
+                    // 【重要】古いAndroidでは、ファイルを勝手に動かしてもギャラリーアプリが気づかない。
+                    // 「ここにあったファイルはあっちに行ったよ！」と教えてあげる(スキャン)必要がある。
                     MediaScannerConnection.scanFile(this,
-                            new String[]{sourcePath, destFile.getAbsolutePath()},
+                            new String[]{sourcePath, destFile.getAbsolutePath()}, // [古い場所, 新しい場所]
                             null, null);
                 }
             }
         }
 
-        // 成功した場合の画面更新処理
+        // ====================================================================================
+        // 共通の終了処理
+        // ====================================================================================
         if (success) {
+            // 成功したら画面を更新して、移動したような演出をする
             Toast.makeText(this, "移動しました", Toast.LENGTH_SHORT).show();
+
+            // 画面のリストデータから削除
             data.remove(position);
+            // アダプター(画面管理係)に「この場所のが消えた」と伝える
             adapter.notifyItemRemoved(position);
+            // 「それ以降の順番が変わったよ」と伝える（これがないと表示がズレる）
             adapter.notifyItemRangeChanged(position, data.size());
         } else {
+            // 失敗したらメッセージだけ出す
             Toast.makeText(this, "移動に失敗しました", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // Android 10以上のスマホで、データベースの中に同じ名前のファイルがあるか確認するメソッド
+    // 指定されたフォルダ(パス)に、指定された名前の画像がすでに存在するかをデータベースに問い合わせる
+    private boolean isPhotoExists(String targetPath, String fileName) {
+        // 画像のデータベースを見る
+        Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        // 検索条件: 「パスが一致」かつ「名前が一致」するもの
+        String selection = MediaStore.MediaColumns.RELATIVE_PATH + "=? AND " + MediaStore.MediaColumns.DISPLAY_NAME + "=?";
+        String[] args = new String[]{ targetPath, fileName };
+
+        try (Cursor c = getContentResolver().query(collection, new String[]{MediaStore.MediaColumns._ID}, selection, args, null)) {
+            // 見つかった数(count)が 0より大きければ「存在する(true)」
+            return c != null && c.getCount() > 0;
+        } catch (Exception e) {
+            // エラーが起きたらとりあえず「ない」ことにする
+            return false;
         }
     }
 
