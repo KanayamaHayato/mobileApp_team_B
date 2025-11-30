@@ -39,11 +39,13 @@ public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
         return new VH(v);
     }
 
+    // データを表示
     @Override public void onBindViewHolder(@NonNull VH h, int pos) {
         Bucket b = items.get(pos);
-        h.txtName.setText(b.bucketName == null ? "(Unknown)" : b.bucketName);
-        h.txtCount.setText(b.count + " 枚");
-        Glide.with(ctx).load(b.coverUri).centerCrop().into(h.imgCover);
+        h.txtName.setText(b.bucketName == null ? "(Unknown)" : b.bucketName); // フォルダ名を表示
+        h.txtCount.setText(b.count + " 枚"); //写真の枚数を表示
+        Glide.with(ctx).load(b.coverUri).centerCrop().into(h.imgCover); // 画像を表示する(Glideというライブラリを使用)
+        // タップ時の処理
         h.itemView.setOnClickListener(v -> { if (onClick != null) onClick.onClick(b); });
     }
 
