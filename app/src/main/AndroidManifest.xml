@@ -34,9 +34,6 @@
             android:name=".PhotoGridActivity"
             android:exported="false" />
         <activity
-            android:name=".FolderFragment"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
