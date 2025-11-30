@@ -1,6 +1,7 @@
 package jp.ac.meijou.android.mobileapp_team_b;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,10 +14,14 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +62,9 @@ public class FolderFragment extends Fragment {
         binding.recyclerBuckets.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerBuckets.setAdapter(adapter);
 
+        // ▼ 追加: ＋ボタンを押したときの処理
+        binding.folderAddButton.setOnClickListener(v -> showCreateFolderDialog());
+
         ensurePermissionAndLoad();
     }
 
@@ -86,4 +94,58 @@ public class FolderFragment extends Fragment {
         binding = null;
     }
 
+
+    // フォルダ新規作成時，名前を入力するダイアログを表示
+    private void showCreateFolderDialog() {
+        EditText input = new EditText(requireContext());
+        input.setHint("フォルダ名を入力");
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("新しいフォルダを作成")
+                .setView(input)
+                .setPositiveButton("作成", (dialog, which) -> {
+                    String name = input.getText().toString();
+                    // 名前を入力した上で"作成"を押したらフォルダを新規作成
+                    if (!name.isEmpty()) {
+                        createNewFolder(name);
+                    }
+                })
+                .setNegativeButton("キャンセル", null)
+                .show();
+    }
+
+    // 実際にフォルダを新規作成してリストに追加する
+    private void createNewFolder(String folderName) {
+        // 保存場所を決める（ "Pictures" フォルダの中に作るようになっているが変更可）
+        File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File newFolder = new File(picturesDir, folderName);
+
+        // フォルダを作成する
+        boolean isSuccess = false;
+        if (!newFolder.exists()) {
+            isSuccess = newFolder.mkdirs(); // ディレクトリ作成
+        } else {
+            Toast.makeText(requireContext(), "既に存在します", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (isSuccess) {
+            Toast.makeText(requireContext(), "作成しました: " + folderName, Toast.LENGTH_SHORT).show();
+
+            //  画面のリストに手動で追加する
+            // (注意: 画像がないのでMediaStoreからは自動で読み込まれないため、手動でBucketを作って足す)
+            Bucket newBucket = new Bucket();
+            newBucket.bucketName = folderName;
+            newBucket.bucketId = "MANUAL_" + folderName; // 仮のID
+            newBucket.count = 0; // 空っぽなので0枚
+            newBucket.coverUri = null; // 画像がないので表紙もなし
+
+            data.add(0, newBucket); // リストの一番上に追加
+            adapter.notifyItemInserted(0); // 画面更新
+            binding.recyclerBuckets.scrollToPosition(0); // 一番上までスクロール
+
+        } else {
+            Toast.makeText(requireContext(), "作成に失敗しました", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
