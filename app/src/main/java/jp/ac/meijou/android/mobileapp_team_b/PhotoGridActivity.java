@@ -134,10 +134,18 @@ public class PhotoGridActivity extends AppCompatActivity {
         @Override public void onBindViewHolder(VH h, int pos) {
             Uri uri = data.get(pos);
             Glide.with(h.img.getContext()).load(uri).centerCrop().into(h.img);
+
+            // タップしたらFullScreenActivityへ移動するように修正した
+            h.itemView.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(v.getContext(), FullScreenActivity.class);
+                // "imageUri" という名札をつけて、画像のURIを文字列にして渡す
+                intent.putExtra("imageUri", uri.toString());
+                v.getContext().startActivity(intent);
+            });
             //拡大へ飛ばしたいならここでIntent
-            h.itemView.setOnClickListener(v ->
-                    Toast.makeText(v.getContext(), uri.toString(), Toast.LENGTH_SHORT).show()
-            );
+//            h.itemView.setOnClickListener(v ->
+//                    Toast.makeText(v.getContext(), uri.toString(), Toast.LENGTH_SHORT).show()
+//            );
 
             // 長押し時の処理
             h.itemView.setOnLongClickListener(v -> {
