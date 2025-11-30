@@ -126,36 +126,53 @@ public class FolderFragment extends Fragment {
 
     // 実際にフォルダを新規作成してリストに追加する
     private void createNewFolder(String folderName) {
-        // 保存場所を決める（ "Pictures" フォルダの中に作るようになっているが変更可）
         File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File newFolder = new File(picturesDir, folderName);
 
-        // フォルダが存在しない場合のみ、新規作成する
-        if (!newFolder.exists()) {
+        // 1. まず、物理的にフォルダが存在するか確認
+        if (newFolder.exists()) {
+
+            // 2. 存在する場合、「画面のリスト(data)」に既に含まれているかチェック
+            boolean isVisible = false;
+            for (Bucket bucket : data) {
+                if (bucket.bucketName.equals(folderName)) {
+                    isVisible = true;
+                    break;
+                }
+            }
+
+            if (isVisible) {
+                // 画面にもあるなら、本当に重複なのでエラーにして終了
+                Toast.makeText(requireContext(), "そのフォルダは既にリストにあります", Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                // 物理的にはあるが画面にはない(空フォルダで再起動後など)場合
+                // 作成処理(mkdirs)はスキップして、下の「リスト追加処理」だけ行わせるためにスルーする
+                Toast.makeText(requireContext(), "既存のフォルダを再表示します", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            // 物理的に存在しない場合のみ、作成を実行
             boolean created = newFolder.mkdirs();
             if (!created) {
                 Toast.makeText(requireContext(), "フォルダ作成に失敗しました", Toast.LENGTH_SHORT).show();
                 return;
             }
             Toast.makeText(requireContext(), "作成しました: " + folderName, Toast.LENGTH_SHORT).show();
-
-            // 空のフォルダを作成した後，再起動等で表示されなくなった時(returnせずに下へ行くことで表示させる)
-        } else {
-            Toast.makeText(requireContext(), "既存のフォルダを表示します", Toast.LENGTH_SHORT).show();
         }
 
-            //  画面のリストに手動で追加する
-            // (注意: 画像がないのでMediaStoreからは自動で読み込まれないため、手動でBucketを作って足す)
+        // --- 以下、リストへの追加処理（新規作成時・再表示時 共通） ---
+
+        //  画面のリストに手動で追加する
+        // (注意: 画像がないのでMediaStoreからは自動で読み込まれないため、手動でBucketを作って足す)
             Bucket newBucket = new Bucket();
             newBucket.bucketName = folderName;
             newBucket.bucketId = "MANUAL_" + folderName; // 仮のID
             newBucket.count = 0; // 空っぽなので0枚
             newBucket.coverUri = null; // 画像がないので表紙もなし
 
-            data.add(0, newBucket); // リストの一番上に追加
-            adapter.notifyItemInserted(0); // 画面更新
-            binding.recyclerBuckets.scrollToPosition(0); // 一番上までスクロール
-
-
+        data.add(0, newBucket); // リストの一番上に追加
+        adapter.notifyItemInserted(0); // 画面更新
+        binding.recyclerBuckets.scrollToPosition(0); // 一番上までスクロール
     }
 }
