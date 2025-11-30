@@ -125,7 +125,7 @@ public class PhotoGridActivity extends AppCompatActivity {
         @Override public int getItemCount() { return data.size(); }
     }
 
-    // URLから実際のファイルパスを入手するメソッド
+    // URIから実際のファイルパスを入手するメソッド
     private String getPathFromUri(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
@@ -138,6 +138,26 @@ public class PhotoGridActivity extends AppCompatActivity {
         }
         return null;
     }
+
+    // URIからファイル名を取得するメソッド
+    private String getFileName(Uri uri){
+        String result = null;
+        // データベース管理されたデータであることを確認
+        if (uri.getScheme().equals("content")){
+            try (Cursor cursor = getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.Media.DISPLAY_NAME},null, null, null)){
+                if (cursor != null && cursor.moveToFirst()){
+                    int index = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+                    if (index >= 0) result = cursor.getString(index);
+                }
+            }
+        }
+        if (result == null){
+            result = uri.getLastPathSegment();
+        }
+        return result;
+    }
+
 
 
     // 移動先のフォルダを選ぶダイアログを表示
