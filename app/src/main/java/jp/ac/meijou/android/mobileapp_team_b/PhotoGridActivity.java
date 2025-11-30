@@ -39,6 +39,12 @@ public class PhotoGridActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private PhotoAdapter adapter;
 
+    // 画像を移動させる際に必要な情報を入れるための変数
+    private Uri pendingUri;
+    private Bucket pendingTargetBucket;
+    private int pendingPosition;
+    private static final int REQUEST_PERMISSION_MOVE = 100; // リクエストコード
+
     @Override // フォルダ一覧画面（FolderFragment）でタップされたフォルダの情報を受け取る
     protected void onCreate(Bundle b) {
         super.onCreate(b);
@@ -61,6 +67,24 @@ public class PhotoGridActivity extends AppCompatActivity {
         }
 
         loadPhotos(bucketId);
+    }
+
+    // 許可画面から戻ってきたときに自動実行されるメソッド
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 「移動の許可リクエスト」から戻ってきて、かつ「OK」だった場合
+        if (requestCode == REQUEST_PERMISSION_MOVE && resultCode == RESULT_OK) {
+            if (pendingUri != null && pendingTargetBucket != null) {
+                // メモしておいた情報を使って、もう一度移動を実行する
+                moveImageFile(pendingUri, pendingTargetBucket, pendingPosition);
+
+                // 使い終わったらメモを消す
+                pendingUri = null;
+                pendingTargetBucket = null;
+            }
+        }
     }
 
     private void loadPhotos(String bucketId) {
@@ -222,7 +246,7 @@ public class PhotoGridActivity extends AppCompatActivity {
 
         // ====================================================================================
         // 【分岐A】 Android 10 (API 29/Q) 以上の新しいスマホの場合
-        // 昔ながらのファイル移動が禁止されているため、データベース上の「住所書き換え」を行います。
+        // ファイル移動が禁止されているため、データベース上の「住所書き換え」を行う
         // ====================================================================================
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             try {
@@ -263,7 +287,7 @@ public class PhotoGridActivity extends AppCompatActivity {
                 // 3. 更新日時を「今」にする (整理した順に並びやすくするため)
                 values.put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis() / 1000);
 
-                // ★ データベース更新実行！ (住所が変わるので実体も自動で移動される)
+                // データベース更新実行 (住所が変わるので実体も自動で移動される)
                 // update(...) は「変更できた件数」を返すので、1件以上なら成功
                 int rows = getContentResolver().update(sourceUri, values, null, null);
                 if (rows > 0) success = true;
@@ -276,13 +300,18 @@ public class PhotoGridActivity extends AppCompatActivity {
                     // 「ユーザーに許可をもらえば直るエラー」の場合
                     RecoverableSecurityException recoverable = (RecoverableSecurityException) e;
                     try {
+                        // 許可した後に仕えるようメモを残す
+                        pendingUri = sourceUri;
+                        pendingTargetBucket = targetBucket;
+                        pendingPosition = position;
+
                         // システム標準の「許可しますか？」ポップアップを出す
                         startIntentSenderForResult(
                                 recoverable.getUserAction().getActionIntent().getIntentSender(),
-                                100, null, 0, 0, 0, null);
+                                REQUEST_PERMISSION_MOVE, null, 0, 0, 0, null);
 
-                        // ここで一旦処理を終える（許可をもらった後、ユーザーにもう一度操作してもらう）
-                        Toast.makeText(this, "許可をしてから、もう一度試してください", Toast.LENGTH_LONG).show();
+                        // ここで一旦処理を終える（許可をもらえた場合，自動でもう一度このmoveImageFileが実行される）
+//                        Toast.makeText(this, "許可をしてから、もう一度試してください", Toast.LENGTH_LONG).show();
                         return;
                     } catch (IntentSender.SendIntentException sendEx) {
                         sendEx.printStackTrace();
@@ -301,7 +330,7 @@ public class PhotoGridActivity extends AppCompatActivity {
         } else {
             // ====================================================================================
             // 【分岐B】 Android 9 (API 28/Pie) 以下の古いスマホの場合
-            // 従来の「ファイルを直接つかんで移動させる」方法で行います。
+            // 従来の「ファイルを直接つかんで移動させる」方法で行う
             // ====================================================================================
 
             // URIから「/storage/emulated/0/...」のような実際のパスを取得
@@ -358,7 +387,7 @@ public class PhotoGridActivity extends AppCompatActivity {
             data.remove(position);
             // アダプター(画面管理係)に「この場所のが消えた」と伝える
             adapter.notifyItemRemoved(position);
-            // 「それ以降の順番が変わったよ」と伝える（これがないと表示がズレる）
+            // 「それ以降の順番が変わった」と伝える（これがないと表示がズレる）
             adapter.notifyItemRangeChanged(position, data.size());
         } else {
             // 失敗したらメッセージだけ出す
