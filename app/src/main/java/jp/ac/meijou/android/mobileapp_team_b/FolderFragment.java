@@ -62,11 +62,21 @@ public class FolderFragment extends Fragment {
         binding.recyclerBuckets.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerBuckets.setAdapter(adapter);
 
-        // ▼ 追加: ＋ボタンを押したときの処理
+        // ＋ボタンを押したときの処理
         binding.folderAddButton.setOnClickListener(v -> showCreateFolderDialog());
 
+        //onResumeで実行しているため必要なくなった(2回実行してしまい，エラーにはならないが無駄)
+//        ensurePermissionAndLoad();
+    }
+
+    // アプリ起動時及びホーム画面に戻ってきたときに自動実行(更新)
+    @Override
+    public void onResume() {
+        super.onResume();
+        // データを再読み込みする
         ensurePermissionAndLoad();
     }
+
 
     // 必要な権限を持っているかを確認(無ければポップアップを出して要求)
     private void ensurePermissionAndLoad() {
