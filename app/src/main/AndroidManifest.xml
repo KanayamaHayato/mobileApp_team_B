@@ -4,14 +4,13 @@
     <!-- カメラ用 -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- カメラがない場合を考慮 -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- Android 13+ -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" /> <!-- Android 12以下 -->
+    <!-- スマホのストレージにデータを書き込むための許可 -->
     <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" /> <!-- Android 10以下 -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -26,19 +25,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileApp_team_B">
         <activity
+            android:name=".FullScreenActivity"
+            android:exported="false" />
+        <activity
             android:name=".AiTest"
             android:exported="true" />
-
         <activity
             android:name=".PhotoGridActivity"
             android:exported="false" />
         <activity
-            android:name=".FolderFragment"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
-<!--            あとでここに戻す-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

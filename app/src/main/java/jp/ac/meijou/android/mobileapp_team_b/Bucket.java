@@ -8,6 +8,11 @@ public class Bucket {
     public int count;
     public Uri coverUri; // 表紙に使う1枚
 
+    // 空のコンストラクタ
+    public Bucket(){
+
+    }
+
     //画像を表示するためのモデル
     public Bucket(String bucketId, String bucketName, int count, Uri coverUri) {
         this.bucketId = bucketId;
