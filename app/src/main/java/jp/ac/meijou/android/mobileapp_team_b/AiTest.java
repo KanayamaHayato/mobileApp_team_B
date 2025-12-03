@@ -94,7 +94,11 @@ public class AiTest extends AppCompatActivity {
         binding.AISampleImageView.setImageBitmap(selectedBitmap);
 
         // 「AI判定」ボタン → 今の画像を判定
-        binding.AISampleButton.setOnClickListener(view -> classifyImage());
+        binding.AISampleButton.setOnClickListener(view -> {
+            // ちゃんとここに来てるかチェック
+            binding.AISampleResultText.setText("ボタン押された！");
+            classifyImage();
+        });
 
         // 「画像選択」ボタン → ギャラリーを開く
         binding.ImagePickButton.setOnClickListener(view -> openGallery());
@@ -131,34 +135,54 @@ public class AiTest extends AppCompatActivity {
 
     // 今選択されている画像を判定
     private void classifyImage() {
-        if (selectedBitmap == null) {
-            Toast.makeText(this, "画像が選択されていません", Toast.LENGTH_SHORT).show();
+
+        if (imageClassifier == null) {
+            binding.AISampleResultText.setText("モデルの読み込みに失敗しています");
             return;
         }
 
-        // Bitmap を TensorImage に変換
-        TensorImage image = TensorImage.fromBitmap(selectedBitmap);
+        if (selectedBitmap == null) {
+            binding.AISampleResultText.setText("画像が選択されていません");
+            return;
+        }
 
-        // 推論実行
-        List<Classifications> results = imageClassifier.classify(image);
+        try {
+            // Bitmap を TensorImage に変換
+            TensorImage image = TensorImage.fromBitmap(selectedBitmap);
 
-        // 結果を画面に表示
-        if (results != null && !results.isEmpty()) {
-            List<Category> categories = results.get(0).getCategories();
-            if (categories != null && !categories.isEmpty()) {
-                Category topResult = categories.get(0);
-                int labelIndex = topResult.getIndex();      // クラスID
-                String labelName = labels.get(labelIndex);  // ラベル名
-                float score = topResult.getScore();         // 信頼度 (0〜1)
+            // 推論実行
+            List<Classifications> results = imageClassifier.classify(image);
 
-                String resultText = "予測: " + labelIndex + " , " + labelName
-                        + "\n信頼度: " + String.format("%.2f", (score * 100)) + " %";
-                binding.AISampleResultText.setText(resultText);
-            } else {
-                binding.AISampleResultText.setText("分類結果なし");
+            if (results == null || results.isEmpty()) {
+                binding.AISampleResultText.setText("予測できませんでした（結果なし）");
+                return;
             }
-        } else {
-            binding.AISampleResultText.setText("予測できませんでした");
+
+            List<Category> categories = results.get(0).getCategories();
+            if (categories == null || categories.isEmpty()) {
+                binding.AISampleResultText.setText("分類結果なし");
+                return;
+            }
+
+            Category topResult = categories.get(0);
+            int labelIndex = topResult.getIndex();  // クラスID
+            float score = topResult.getScore();     // 信頼度 (0〜1)
+
+            // ★ ラベルの範囲チェックを必ず入れる
+            String labelName;
+            if (labelIndex >= 0 && labelIndex < labels.size()) {
+                labelName = labels.get(labelIndex);
+            } else {
+                labelName = "Unknown(" + labelIndex + ")";
+            }
+
+            String resultText = "予測: " + labelIndex + " , " + labelName
+                    + "\n信頼度: " + String.format("%.2f", (score * 100)) + " %";
+            binding.AISampleResultText.setText(resultText);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            binding.AISampleResultText.setText("エラー: " + e.getClass().getSimpleName());
         }
     }
 }
