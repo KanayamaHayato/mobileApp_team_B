@@ -7,35 +7,51 @@
     android:layout_height="match_parent"
     tools:context=".AiTest">
 
+    <TextView
+        android:id="@+id/AISampleResultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ここに結果が表示されます"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <ImageView
+        android:id="@+id/AISampleImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/AISampleResultText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="24dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/sample5" />
 
     <Button
         android:id="@+id/AISampleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="165dp"
-        tools:layout_editor_absoluteY="264dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="AI判定"
+        app:layout_constraintBottom_toTopOf="@id/AISampleImageView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toStartOf="@id/ImagePickButton"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="12dp" />
 
-    <ImageView
-        android:id="@+id/AISampleImageView"
-        android:layout_width="302dp"
-        android:layout_height="326dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/AISampleButton"
-        app:srcCompat="@drawable/sample5" />
-
-    <TextView
-        android:id="@+id/AISampleResultText"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/ImagePickButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ここに結果が表示されます"
-        android:paddingTop="16dp"
-        android:textSize="18sp" />
+        android:text="画像選択"
+        app:layout_constraintBottom_toTopOf="@id/AISampleImageView"
+        app:layout_constraintStart_toEndOf="@id/AISampleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="12dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
