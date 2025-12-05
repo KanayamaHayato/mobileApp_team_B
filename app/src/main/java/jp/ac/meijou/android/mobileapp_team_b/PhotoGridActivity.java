@@ -45,6 +45,9 @@ public class PhotoGridActivity extends AppCompatActivity {
     private int pendingPosition;
     private static final int REQUEST_PERMISSION_MOVE = 100; // リクエストコード
 
+    private boolean isTrashFolder = false; // ごみ箱フォルダか否か
+    private static final int REQUEST_DELETE_ALL = 200; // 削除許可用の番号
+
     @Override // フォルダ一覧画面（FolderFragment）でタップされたフォルダの情報を受け取る
     protected void onCreate(Bundle b) {
         super.onCreate(b);
@@ -53,6 +56,11 @@ public class PhotoGridActivity extends AppCompatActivity {
         String bucketId = getIntent().getStringExtra("bucketId");
         String bucketName = getIntent().getStringExtra("bucketName");
         setTitle(bucketName == null ? "Photos" : bucketName);
+
+        // Trashフォルダかどうかを判定
+        if (bucketName != null && bucketName.equalsIgnoreCase("Trash")) {
+            isTrashFolder = true;
+        }
 
         recycler = findViewById(R.id.recyclerPhotos);
         // 3列のグリッド表示にする
@@ -71,8 +79,8 @@ public class PhotoGridActivity extends AppCompatActivity {
 
     // 許可画面から戻ってきたときに自動実行されるメソッド
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, android.content.Intent IntentData) {
+        super.onActivityResult(requestCode, resultCode, IntentData);
 
         // 「移動の許可リクエスト」から戻ってきて、かつ「OK」だった場合
         if (requestCode == REQUEST_PERMISSION_MOVE && resultCode == RESULT_OK) {
@@ -85,7 +93,44 @@ public class PhotoGridActivity extends AppCompatActivity {
                 pendingTargetBucket = null;
             }
         }
+
+        // 削除(ゴミ箱を空にする)の許可が降りたとき
+        if (requestCode == REQUEST_DELETE_ALL && resultCode == RESULT_OK) {
+            // 許可された時点でシステムが削除を実行してくれているため
+            // アプリ側は画面のリストを空にするだけでOK
+            data.clear();
+            adapter.notifyDataSetChanged();
+            Toast.makeText(this, "ゴミ箱を空にしました", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    // メニューを表示する設定
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        // Trashフォルダのときだけ、ゴミ箱ボタンを表示する
+        if (isTrashFolder) {
+            getMenuInflater().inflate(R.menu.menu_trash, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // ボタンが押されたときの処理
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        if (item.getItemId() == R.id.action_empty_trash) {
+            // 確認ダイアログを出す
+            new AlertDialog.Builder(this)
+                    .setTitle("ゴミ箱を空にする")
+                    .setMessage("フォルダ内のすべての画像が完全に削除されます。\nよろしいですか？")
+                    .setPositiveButton("削除", (dialog, which) -> deleteTotalTrash())
+                    .setNegativeButton("キャンセル", null)
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void loadPhotos(String bucketId) {
         new Thread(() -> {
@@ -149,7 +194,7 @@ public class PhotoGridActivity extends AppCompatActivity {
 
             // 長押し時の処理
             h.itemView.setOnLongClickListener(v -> {
-                showMoveDialog(uri, pos); // 移動用のダイアログを出す
+                showActionDialog(uri, pos); // 移動用のダイアログを出す
                 return true; // "処理完了"を返す（通常のクリック処理をキャンセル）
             });
 
@@ -235,6 +280,47 @@ public class PhotoGridActivity extends AppCompatActivity {
                 .setNegativeButton("キャンセル", null)
                 .show();
     }
+
+
+    // 操作を選択するダイアログ (移動 or 削除)
+    private void showActionDialog(Uri uri, int position) {
+        String[] options = {"フォルダへ移動", "削除 (ごみ箱へ)"};
+
+        new AlertDialog.Builder(this)
+                .setTitle("操作を選択")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        // 0番目: 「フォルダへ移動」なら、今までのダイアログを出す
+                        showMoveDialog(uri, position);
+                    } else {
+                        // 1番目: 「削除」なら、ごみ箱へ移動させる処理へ
+                        confirmTrash(uri, position);
+                    }
+                })
+                .show();
+    }
+
+    // 削除前の最終確認
+    private void confirmTrash(Uri uri, int position) {
+        new AlertDialog.Builder(this)
+                .setTitle("削除しますか？")
+                .setMessage("画像は「Trash」フォルダに移動されます。")
+                .setPositiveButton("削除", (dialog, which) -> {
+                    moveToTrash(uri, position);
+                })
+                .setNegativeButton("キャンセル", null)
+                .show();
+    }
+
+    // ごみ箱フォルダへ移動させる処理
+    private void moveToTrash(Uri uri, int position) {
+        // 「Trash」という名前のフォルダデータ(Bucket)をその場で作る
+        Bucket trashBucket = new Bucket();
+        trashBucket.bucketName = "Trash"; // フォルダ名 (自由に変えてOK)
+        trashBucket.bucketId = "MANUAL_TRASH";
+        moveImageFile(uri, trashBucket, position);
+    }
+
 
     // 実際にファイルを移動させる処理
     /**
@@ -420,6 +506,57 @@ public class PhotoGridActivity extends AppCompatActivity {
         } catch (Exception e) {
             // エラーが起きたらとりあえず「ない」ことにする
             return false;
+        }
+    }
+
+
+
+    // Trashフォルダの中身を全て削除する
+    private void deleteTotalTrash() {
+        if (data.isEmpty()) {
+            Toast.makeText(this, "ゴミ箱は空です", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Android 11 (API 30) 以上の場合: まとめて許可を取る最新の方法
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // 削除リクエストを作成 (dataリストに入っている全URIを渡す)
+            android.app.PendingIntent pi = MediaStore.createDeleteRequest(getContentResolver(), data);
+            try {
+                // システムの「〇枚の画像を削除しますか？」画面を出す
+                startIntentSenderForResult(pi.getIntentSender(), REQUEST_DELETE_ALL, null, 0, 0, 0, null);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        }
+        // Android 10 以下の場合: ループして削除 (従来の方法)
+        else {
+            new Thread(() -> {
+                int deleteCount = 0;
+                for (Uri uri : data) {
+                    try {
+                        // 1件ずつ削除
+                        getContentResolver().delete(uri, null, null);
+                        deleteCount++;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        // Android 10の場合、ここでRecoverableSecurityExceptionが出る可能性がありますが
+                        // 一括削除で1件ずつ許可を取るのはUXが悪いため、今回はスキップします
+                    }
+                }
+
+                // 結果を画面に反映
+                int finalCount = deleteCount;
+                runOnUiThread(() -> {
+                    if (finalCount > 0) {
+                        Toast.makeText(this, finalCount + "枚 削除しました", Toast.LENGTH_SHORT).show();
+                        data.clear();
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(this, "削除できませんでした", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
         }
     }
 

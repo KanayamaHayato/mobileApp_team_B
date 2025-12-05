@@ -32,7 +32,8 @@
             android:exported="true" />
         <activity
             android:name=".PhotoGridActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
