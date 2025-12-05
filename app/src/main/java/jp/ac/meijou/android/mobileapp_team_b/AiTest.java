@@ -53,6 +53,7 @@ public class AiTest extends AppCompatActivity {
         binding = ActivityAiTestBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         // ==== ギャラリーランチャーの初期化（super のあと！） ====
         pickImageLauncher =
                 registerForActivityResult(
