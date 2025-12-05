@@ -44,7 +44,36 @@ public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
         Bucket b = items.get(pos);
         h.txtName.setText(b.bucketName == null ? "(Unknown)" : b.bucketName); // フォルダ名を表示
         h.txtCount.setText(b.count + " 枚"); //写真の枚数を表示
-        Glide.with(ctx).load(b.coverUri).centerCrop().into(h.imgCover); // 画像を表示する(Glideというライブラリを使用)
+
+        // Trashフォルダならアイコン、それ以外なら写真を表示
+
+        if (b.bucketName != null && b.bucketName.equalsIgnoreCase("Trash")) {
+            // Trashの場合
+            // 写真読み込みをキャンセル（前の画像が残らないように）
+            Glide.with(ctx).clear(h.imgCover);
+
+            // Android標準のごみ箱アイコンをセット
+            // (もし自作の画像を使いたい場合は R.drawable.my_trash_icon に変えてください)
+            h.imgCover.setImageResource(android.R.drawable.ic_menu_delete);
+
+            // アイコンが見やすいようにサイズ調整（写真はCropだがアイコンは全体表示）
+            h.imgCover.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+            // アイコンが見やすいように背景色を少しグレーにする
+             h.imgCover.setBackgroundColor(android.graphics.Color.LTGRAY);
+
+        } else {
+            // Trash以外の場合（通常）
+            h.imgCover.setScaleType(ImageView.ScaleType.CENTER_CROP); // 枠いっぱいに表示
+
+            if (b.coverUri != null) {
+                Glide.with(ctx).load(b.coverUri).centerCrop().into(h.imgCover);
+            } else {
+                // 画像がない空フォルダの場合
+                h.imgCover.setImageResource(android.R.drawable.ic_menu_gallery); // 適当なデフォルト画像
+            }
+        }
+
         // タップ時の処理
         h.itemView.setOnClickListener(v -> { if (onClick != null) onClick.onClick(b); });
     }

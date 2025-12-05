@@ -91,9 +91,18 @@ public class FolderFragment extends Fragment {
     private void loadBuckets() {
         new Thread(() -> {
             List<Bucket> list = MediaStoreHelper.queryBuckets(requireContext());
+            // "Trash" 以外だけを集めた新しいリストを作る
+            List<Bucket> filteredList = new ArrayList<>();
+            for (Bucket b : list) {
+                // 名前が "Trash" (大文字小文字無視) じゃなければリストに入れる
+                if (!b.bucketName.equalsIgnoreCase("Trash")) {
+                    filteredList.add(b);
+                }
+            }
+
             requireActivity().runOnUiThread(() -> {
                 data.clear();
-                data.addAll(list);
+                data.addAll(filteredList);
                 adapter.notifyDataSetChanged();
             });
         }).start();
