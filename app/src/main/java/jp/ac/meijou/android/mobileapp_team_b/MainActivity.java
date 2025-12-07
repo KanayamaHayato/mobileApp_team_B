@@ -1,25 +1,36 @@
 package jp.ac.meijou.android.mobileapp_team_b;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.ByteArrayOutputStream;
+
 import jp.ac.meijou.android.mobileapp_team_b.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+
+    // カメラ用ランチャーを追加
+    private ActivityResultLauncher<Intent> cameraLauncher;
+    private ActivityResultLauncher<String> cameraPermissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +40,44 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // --- カメラ権限リクエスト用ランチャー ---
+        cameraPermissionLauncher =
+                registerForActivityResult(
+                        new ActivityResultContracts.RequestPermission(),
+                        isGranted -> {
+                            if (isGranted) {
+                                // 許可されたらカメラを開く
+                                openCamera();
+                            } else {
+                                Toast.makeText(this, "カメラ権限がないため起動できません", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+
+        // カメラ結果を受け取るランチャー
+        cameraLauncher =
+                registerForActivityResult(
+                        new ActivityResultContracts.StartActivityForResult(),
+                        result -> {
+                            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                                Bundle extras = result.getData().getExtras();
+                                if (extras != null) {
+                                    Bitmap bitmap = (Bitmap) extras.get("data");
+                                    if (bitmap != null) {
+                                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                                        byte[] bytes = stream.toByteArray();
+
+                                        Intent intent = new Intent(this, AiTest.class);
+                                        intent.putExtra("captured_image", bytes);
+                                        startActivity(intent);
+                                    }
+                                }
+                            }
+                        }
+                );
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -36,14 +85,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //カメラ起動（暗黙的）
-        binding.buttonCamera.setOnClickListener((view -> {
-            var intent = new Intent();
 
-            intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-            startActivity(intent);
+        // カメラ起動（結果を受け取る）
+        //  INTENT_ACTION_STILL_IMAGE_CAMERA はただカメラアプリを開くだけなので
+        //  ACTION_IMAGE_CAPTURE の「撮った画像を返してくれる」インテントに変更
+        binding.buttonCamera.setOnClickListener(view -> {
+            // 権限があるか確認
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED) {
+                // もう許可されてる → そのままカメラ起動
+                openCamera();
+            } else {
+                // まだ許可されていない → 権限をリクエスト
+                cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA);
+            }
+        });
 
-        }));
+
+
         /*
         //画面遷移（FolderActivity）
         //binding.buttonOpenFolders.setOnClickListener(v ->
@@ -110,5 +171,10 @@ public class MainActivity extends AppCompatActivity {
             else if (position == 1) return new RecentFragment(); // ダミーでもOK
             else return new OtherFragment();                    // ダミーでもOK
         }
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraLauncher.launch(intent);
     }
 }

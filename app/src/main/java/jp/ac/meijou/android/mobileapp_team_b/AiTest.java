@@ -88,10 +88,26 @@ public class AiTest extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // ★ MainActivity から画像が送られてきていないかチェック
+        byte[] bytes = getIntent().getByteArrayExtra("captured_image");
+        if (bytes != null) {
+            // カメラで撮った画像がある場合
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            selectedBitmap = bitmap;
+            binding.AISampleImageView.setImageBitmap(selectedBitmap);
 
-        // 最初は sample5 を判定対象にしておく
-        selectedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample5);
-        binding.AISampleImageView.setImageBitmap(selectedBitmap);
+            // ここでカメラ画像であることを表示しておく
+            binding.AISampleResultText.setText("カメラで撮影した画像で判定します");
+
+            // 自動でAI判定する
+            classifyImage();
+        } else {
+            // 何も渡されていないときは、従来通り sample5 を使う
+            selectedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample5);
+            binding.AISampleImageView.setImageBitmap(selectedBitmap);
+
+            binding.AISampleResultText.setText("サンプル画像(sample5)で判定します");
+        }
 
         // 「AI判定」ボタン → 今の画像を判定
         binding.AISampleButton.setOnClickListener(view -> {
