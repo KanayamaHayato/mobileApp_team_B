@@ -1,1000 +1,1000 @@
-tench
-goldfish
-great white shark
-tiger shark
-hammerhead
-electric ray
-stingray
-cock
-hen
-ostrich
-brambling
-goldfinch
-house finch
-junco
-indigo bunting
-robin
-bulbul
-jay
-magpie
-chickadee
-water ouzel
-kite
-bald eagle
-vulture
-great grey owl
-European fire salamander
-common newt
-eft
-spotted salamander
-axolotl
-bullfrog
-tree frog
-tailed frog
-loggerhead
-leatherback turtle
-mud turtle
-terrapin
-box turtle
-banded gecko
-common iguana
-American chameleon
-whiptail
-agama
-frilled lizard
-alligator lizard
-Gila monster
-green lizard
-African chameleon
-Komodo dragon
-African crocodile
-American alligator
-triceratops
-thunder snake
-ringneck snake
-hognose snake
-green snake
-king snake
-garter snake
-water snake
-vine snake
-night snake
-boa constrictor
-rock python
-Indian cobra
-green mamba
-sea snake
-horned viper
-diamondback
-sidewinder
-trilobite
-harvestman
-scorpion
-black and gold garden spider
-barn spider
-garden spider
-black widow
-tarantula
-wolf spider
-tick
-centipede
-black grouse
-ptarmigan
-ruffed grouse
-prairie chicken
-peacock
-quail
-partridge
-African grey
-macaw
-sulphur-crested cockatoo
-lorikeet
-coucal
-bee eater
-hornbill
-hummingbird
-jacamar
-toucan
-drake
-red-breasted merganser
-goose
-black swan
-tusker
-echidna
-platypus
-wallaby
-koala
-wombat
-jellyfish
-sea anemone
-brain coral
-flatworm
-nematode
-conch
-snail
-slug
-sea slug
-chiton
-chambered nautilus
-Dungeness crab
-rock crab
-fiddler crab
-king crab
-American lobster
-spiny lobster
-crayfish
-hermit crab
-isopod
-white stork
-black stork
-spoonbill
-flamingo
-little blue heron
-American egret
-bittern
-crane
-limpkin
-European gallinule
-American coot
-bustard
-ruddy turnstone
-red-backed sandpiper
-redshank
-dowitcher
-oystercatcher
-pelican
-king penguin
-albatross
-grey whale
-killer whale
-dugong
-sea lion
-Chihuahua
-Japanese spaniel
-Maltese dog
-Pekinese
-Shih-Tzu
-Blenheim spaniel
-papillon
-toy terrier
-Rhodesian ridgeback
-Afghan hound
-basset
-beagle
-bloodhound
-bluetick
-black-and-tan coonhound
-Walker hound
-English foxhound
-redbone
-borzoi
-Irish wolfhound
-Italian greyhound
-whippet
-Ibizan hound
-Norwegian elkhound
-otterhound
-Saluki
-Scottish deerhound
-Weimaraner
-Staffordshire bullterrier
-American Staffordshire terrier
-Bedlington terrier
-Border terrier
-Kerry blue terrier
-Irish terrier
-Norfolk terrier
-Norwich terrier
-Yorkshire terrier
-wire-haired fox terrier
-Lakeland terrier
-Sealyham terrier
-Airedale
-cairn
-Australian terrier
-Dandie Dinmont
-Boston bull
-miniature schnauzer
-giant schnauzer
-standard schnauzer
-Scotch terrier
-Tibetan terrier
-silky terrier
-soft-coated wheaten terrier
-West Highland white terrier
-Lhasa
-flat-coated retriever
-curly-coated retriever
-golden retriever
-Labrador retriever
-Chesapeake Bay retriever
-German short-haired pointer
-vizsla
-English setter
-Irish setter
-Gordon setter
-Brittany spaniel
-clumber
-English springer
-Welsh springer spaniel
-cocker spaniel
-Sussex spaniel
-Irish water spaniel
-kuvasz
-schipperke
-groenendael
-malinois
-briard
-kelpie
-komondor
-Old English sheepdog
-Shetland sheepdog
-collie
-Border collie
-Bouvier des Flandres
-Rottweiler
-German shepherd
-Doberman
-miniature pinscher
-Greater Swiss Mountain dog
-Bernese mountain dog
-Appenzeller
-EntleBucher
-boxer
-bull mastiff
-Tibetan mastiff
-French bulldog
-Great Dane
-Saint Bernard
-Eskimo dog
-malamute
-Siberian husky
-dalmatian
-affenpinscher
-basenji
-pug
-Leonberg
-Newfoundland
-Great Pyrenees
-Samoyed
-Pomeranian
-chow
-keeshond
-Brabancon griffon
-Pembroke
-Cardigan
-toy poodle
-miniature poodle
-standard poodle
-Mexican hairless
-timber wolf
-white wolf
-red wolf
-coyote
-dingo
-dhole
-African hunting dog
-hyena
-red fox
-kit fox
-Arctic fox
-grey fox
-tabby
-tiger cat
-Persian cat
-Siamese cat
-Egyptian cat
-cougar
-lynx
-leopard
-snow leopard
-jaguar
-lion
-tiger
-cheetah
-brown bear
-American black bear
-ice bear
-sloth bear
-mongoose
-meerkat
-tiger beetle
-ladybug
-ground beetle
-long-horned beetle
-leaf beetle
-dung beetle
-rhinoceros beetle
-weevil
-fly
-bee
-ant
-grasshopper
-cricket
-walking stick
-cockroach
-mantis
-cicada
-leafhopper
-lacewing
-dragonfly
-damselfly
-admiral
-ringlet
-monarch
-cabbage butterfly
-sulphur butterfly
-lycaenid
-starfish
-sea urchin
-sea cucumber
-wood rabbit
-hare
-Angora
-hamster
-porcupine
-fox squirrel
-marmot
-beaver
-guinea pig
-sorrel
-zebra
-hog
-wild boar
-warthog
-hippopotamus
-ox
-water buffalo
-bison
-ram
-bighorn
-ibex
-hartebeest
-impala
-gazelle
-Arabian camel
-llama
-weasel
-mink
-polecat
-black-footed ferret
-otter
-skunk
-badger
-armadillo
-three-toed sloth
-orangutan
-gorilla
-chimpanzee
-gibbon
-siamang
-guenon
-patas
-baboon
-macaque
-langur
-colobus
-proboscis monkey
-marmoset
-capuchin
-howler monkey
-titi
-spider monkey
-squirrel monkey
-Madagascar cat
-indri
-Indian elephant
-African elephant
-lesser panda
-giant panda
-barracouta
-eel
-coho
-rock beauty
-anemone fish
-sturgeon
-gar
-lionfish
-puffer
-abacus
-abaya
-academic gown
-accordion
-acoustic guitar
-aircraft carrier
-airliner
-airship
-altar
-ambulance
-amphibian
-analog clock
-apiary
-apron
-ashcan
-assault rifle
-backpack
-bakery
-balance beam
-balloon
-ballpoint
-Band Aid
-banjo
-bannister
-barbell
-barber chair
-barbershop
-barn
-barometer
-barrel
-barrow
-baseball
-basketball
-bassinet
-bassoon
-bathing cap
-bath towel
-bathtub
-beach wagon
-beacon
-beaker
-bearskin
-beer bottle
-beer glass
-bell cote
-bib
-bicycle-built-for-two
-bikini
-binder
-binoculars
-birdhouse
-boathouse
-bobsled
-bolo tie
-bonnet
-bookcase
-bookshop
-bottlecap
-bow
-bow tie
-brass
-brassiere
-breakwater
-breastplate
-broom
-bucket
-buckle
-bulletproof vest
-bullet train
-butcher shop
-cab
-caldron
-candle
-cannon
-canoe
-can opener
-cardigan
-car mirror
-carousel
-carpenter's kit
-carton
-car wheel
-cash machine
-cassette
-cassette player
-castle
-catamaran
-CD player
-cello
-cellular telephone
-chain
-chainlink fence
-chain mail
-chain saw
-chest
-chiffonier
-chime
-china cabinet
-Christmas stocking
-church
-cinema
-cleaver
-cliff dwelling
-cloak
-clog
-cocktail shaker
-coffee mug
-coffeepot
-coil
-combination lock
-computer keyboard
-confectionery
-container ship
-convertible
-corkscrew
-cornet
-cowboy boot
-cowboy hat
-cradle
-crane
-crash helmet
-crate
-crib
-Crock Pot
-croquet ball
-crutch
-cuirass
-dam
-desk
-desktop computer
-dial telephone
-diaper
-digital clock
-digital watch
-dining table
-dishrag
-dishwasher
-disk brake
-dock
-dogsled
-dome
-doormat
-drilling platform
-drum
-drumstick
-dumbbell
-Dutch oven
-electric fan
-electric guitar
-electric locomotive
-entertainment center
-envelope
-espresso maker
-face powder
-feather boa
-file
-fireboat
-fire engine
-fire screen
-flagpole
-flute
-folding chair
-football helmet
-forklift
-fountain
-fountain pen
-four-poster
-freight car
-French horn
-frying pan
-fur coat
-garbage truck
-gasmask
-gas pump
-goblet
-go-kart
-golf ball
-golfcart
-gondola
-gong
-gown
-grand piano
-greenhouse
-grille
-grocery store
-guillotine
-hair slide
-hair spray
-half track
-hammer
-hamper
-hand blower
-hand-held computer
-handkerchief
-hard disc
-harmonica
-harp
-harvester
-hatchet
-holster
-home theater
-honeycomb
-hook
-hoopskirt
-horizontal bar
-horse cart
-hourglass
-iPod
-iron
-jack-o'-lantern
-jean
-jeep
-jersey
-jigsaw puzzle
-jinrikisha
-joystick
-kimono
-knee pad
-knot
-lab coat
-ladle
-lampshade
-laptop
-lawn mower
-lens cap
-letter opener
-library
-lifeboat
-lighter
-limousine
-liner
-lipstick
-Loafer
-lotion
-loudspeaker
-loupe
-lumbermill
-magnetic compass
-mailbag
-mailbox
-maillot
-maillot
-manhole cover
-maraca
-marimba
-mask
-matchstick
-maypole
-maze
-measuring cup
-medicine chest
-megalith
-microphone
-microwave
-military uniform
-milk can
-minibus
-miniskirt
-minivan
-missile
-mitten
-mixing bowl
-mobile home
-Model T
-modem
-monastery
-monitor
-moped
-mortar
-mortarboard
-mosque
-mosquito net
-motor scooter
-mountain bike
-mountain tent
-mouse
-mousetrap
-moving van
-muzzle
-nail
-neck brace
-necklace
-nipple
-notebook
-obelisk
-oboe
-ocarina
-odometer
-oil filter
-organ
-oscilloscope
-overskirt
-oxcart
-oxygen mask
-packet
-paddle
-paddlewheel
-padlock
-paintbrush
-pajama
-palace
-panpipe
-paper towel
-parachute
-parallel bars
-park bench
-parking meter
-passenger car
-patio
-pay-phone
-pedestal
-pencil box
-pencil sharpener
-perfume
-Petri dish
-photocopier
-pick
-pickelhaube
-picket fence
-pickup
-pier
-piggy bank
-pill bottle
-pillow
-ping-pong ball
-pinwheel
-pirate
-pitcher
-plane
-planetarium
-plastic bag
-plate rack
-plow
-plunger
-Polaroid camera
-pole
-police van
-poncho
-pool table
-pop bottle
-pot
-potter's wheel
-power drill
-prayer rug
-printer
-prison
-projectile
-projector
-puck
-punching bag
-purse
-quill
-quilt
-racer
-racket
-radiator
-radio
-radio telescope
-rain barrel
-recreational vehicle
-reel
-reflex camera
-refrigerator
-remote control
-restaurant
-revolver
-rifle
-rocking chair
-rotisserie
-rubber eraser
-rugby ball
-rule
-running shoe
-safe
-safety pin
-saltshaker
-sandal
-sarong
-sax
-scabbard
-scale
-school bus
-schooner
-scoreboard
-screen
-screw
-screwdriver
-seat belt
-sewing machine
-shield
-shoe shop
-shoji
-shopping basket
-shopping cart
-shovel
-shower cap
-shower curtain
-ski
-ski mask
-sleeping bag
-slide rule
-sliding door
-slot
-snorkel
-snowmobile
-snowplow
-soap dispenser
-soccer ball
-sock
-solar dish
-sombrero
-soup bowl
-space bar
-space heater
-space shuttle
-spatula
-speedboat
-spider web
-spindle
-sports car
-spotlight
-stage
-steam locomotive
-steel arch bridge
-steel drum
-stethoscope
-stole
-stone wall
-stopwatch
-stove
-strainer
-streetcar
-stretcher
-studio couch
-stupa
-submarine
-suit
-sundial
-sunglass
-sunglasses
-sunscreen
-suspension bridge
-swab
-sweatshirt
-swimming trunks
-swing
-switch
-syringe
-table lamp
-tank
-tape player
-teapot
-teddy
-television
-tennis ball
-thatch
-theater curtain
-thimble
-thresher
-throne
-tile roof
-toaster
-tobacco shop
-toilet seat
-torch
-totem pole
-tow truck
-toyshop
-tractor
-trailer truck
-tray
-trench coat
-tricycle
-trimaran
-tripod
-triumphal arch
-trolleybus
-trombone
-tub
-turnstile
-typewriter keyboard
-umbrella
-unicycle
-upright
-vacuum
-vase
-vault
-velvet
-vending machine
-vestment
-viaduct
-violin
-volleyball
-waffle iron
-wall clock
-wallet
-wardrobe
-warplane
-washbasin
-washer
-water bottle
-water jug
-water tower
-whiskey jug
-whistle
-wig
-window screen
-window shade
-Windsor tie
-wine bottle
-wing
-wok
-wooden spoon
-wool
-worm fence
-wreck
-yawl
-yurt
-web site
-comic book
-crossword puzzle
-street sign
-traffic light
-book jacket
-menu
-plate
-guacamole
-consomme
-hot pot
-trifle
-ice cream
-ice lolly
-French loaf
-bagel
-pretzel
-cheeseburger
-hotdog
-mashed potato
-head cabbage
-broccoli
-cauliflower
-zucchini
-spaghetti squash
-acorn squash
-butternut squash
-cucumber
-artichoke
-bell pepper
-cardoon
-mushroom
-Granny Smith
-strawberry
-orange
-lemon
-fig
-pineapple
-banana
-jackfruit
-custard apple
-pomegranate
-hay
-carbonara
-chocolate sauce
-dough
-meat loaf
-pizza
-potpie
-burrito
-red wine
-espresso
-cup
-eggnog
-alp
-bubble
-cliff
-coral reef
-geyser
-lakeside
-promontory
-sandbar
-seashore
-valley
-volcano
-ballplayer
-groom
-scuba diver
-rapeseed
-daisy
-yellow lady's slipper
-corn
-acorn
-hip
-buckeye
-coral fungus
-agaric
-gyromitra
-stinkhorn
-earthstar
-hen-of-the-woods
-bolete
-ear
-toilet tissue
+テンチ(tench)
+金魚(goldfish)
+ホオジロザメ(great white shark)
+イタチザメ(tiger shark)
+シュモクザメ(hammerhead)
+シビレエイ(electric ray)
+アカエイ(stingray)
+雄鶏(cock)
+雌鶏(hen)
+ダチョウ(ostrich)
+アトリ(brambling)
+ゴシキヒワ(goldfinch)
+メキシコマシコ(house finch)
+ユキヒメドリ(junco)
+ルリノジコ(indigo bunting)
+コマツグミ(robin)
+ヒヨドリ(bulbul)
+カケス(jay)
+カササギ(magpie)
+アメリカコガラ(chickadee)
+カワガラス(water ouzel)
+トビ(kite)
+ハクトウワシ(bald eagle)
+ハゲワシ(vulture)
+カラフトフクロウ(great grey owl)
+マダラサラマンダー(European fire salamander)
+イモリ(common newt)
+イモリの幼体(eft)
+スポットサラマンダー(spotted salamander)
+ウーパールーパー(axolotl)
+ウシガエル(bullfrog)
+アマガエル(tree frog)
+オオアタマガエル(tailed frog)
+アカウミガメ(loggerhead)
+オサガメ(leatherback turtle)
+ドロガメ(mud turtle)
+キスイガメ(terrapin)
+ハコガメ(box turtle)
+バンドゲッコー(banded gecko)
+グリーンイグアナ(common iguana)
+アメリカカメレオン(American chameleon)
+ハシリトカゲ(whiptail)
+アガマ(agama)
+エリマキトカゲ(frilled lizard)
+アリゲータートカゲ(alligator lizard)
+アメリカドクトカゲ(Gila monster)
+ミドリカナヘビ(green lizard)
+アフリカカメレオン(African chameleon)
+コモドオオトカゲ(Komodo dragon)
+ナイルワニ(African crocodile)
+アメリカアリゲーター(American alligator)
+トリケラトプス(triceratops)
+サンダースネーク(thunder snake)
+クビワヘビ(ringneck snake)
+シシバナヘビ(hognose snake)
+アオヘビ(green snake)
+キングヘビ(king snake)
+ガータースネーク(garter snake)
+ミズヘビ(water snake)
+ツルヘビ(vine snake)
+ナイトスネーク(night snake)
+ボアコンストリクター(boa constrictor)
+アミメニシキヘビ(rock python)
+インドコブラ(Indian cobra)
+グリーンマンバ(green mamba)
+ウミヘビ(sea snake)
+ツノクサリヘビ(horned viper)
+ダイヤガラガラヘビ(diamondback)
+サイドワインダー(sidewinder)
+三葉虫(trilobite)
+ザトウムシ(harvestman)
+サソリ(scorpion)
+コガネグモ(black and gold garden spider)
+ニワオニグモ(barn spider)
+キグモ(garden spider)
+クロゴケグモ(black widow)
+タランチュラ(tarantula)
+ドクグモ(wolf spider)
+ダニ(tick)
+ムカデ(centipede)
+クロライチョウ(black grouse)
+ライチョウ(ptarmigan)
+エリマキライチョウ(ruffed grouse)
+ソウゲンライチョウ(prairie chicken)
+クジャク(peacock)
+ウズラ(quail)
+ヤマウズラ(partridge)
+ヨウム(African grey)
+コンゴウインコ(macaw)
+キバタン(sulphur-crested cockatoo)
+ヒインコ(lorikeet)
+バンケン(coucal)
+ハチクイ(bee eater)
+サイチョウ(hornbill)
+ハチドリ(hummingbird)
+キリハシ(jacamar)
+オオハシ(toucan)
+カモ(drake)
+ウミアイサ(red-breasted merganser)
+ガチョウ(goose)
+コクチョウ(black swan)
+牙の大きな動物(tusker)
+ハリモグラ(echidna)
+カモノハシ(platypus)
+ワラビー(wallaby)
+コアラ(koala)
+ウォンバット(wombat)
+クラゲ(jellyfish)
+イソギンチャク(sea anemone)
+ノウサンゴ(brain coral)
+扁形動物(flatworm)
+線虫(nematode)
+巻貝(conch)
+カタツムリ(snail)
+ナメクジ(slug)
+ウミウシ(sea slug)
+ヒザラガイ(chiton)
+オウムガイ(chambered nautilus)
+ダンジネスクラブ(Dungeness crab)
+イチョウガニ(rock crab)
+シオマネキ(fiddler crab)
+タラバガニ(king crab)
+アメリカンロブスター(American lobster)
+イセエビ(spiny lobster)
+ザリガニ(crayfish)
+ヤドカリ(hermit crab)
+ダンゴムシ(isopod)
+シュバシコウ(white stork)
+ナベコウ(black stork)
+ヘラサギ(spoonbill)
+フラミンゴ(flamingo)
+ヒメアオサギ(little blue heron)
+ダイサギ(American egret)
+サンカノゴイ(bittern)
+ツル(crane)
+ツルモドキ(limpkin)
+セイケイ(European gallinule)
+アメリカオオバン(American coot)
+ノガン(bustard)
+キョウジョシギ(ruddy turnstone)
+ハマシギ(red-backed sandpiper)
+アカアシシギ(redshank)
+オオハシシギ(dowitcher)
+ミヤコドリ(oystercatcher)
+ペリカン(pelican)
+オウサマペンギン(king penguin)
+アホウドリ(albatross)
+コククジラ(grey whale)
+シャチ(killer whale)
+ジュゴン(dugong)
+アシカ(sea lion)
+チワワ(Chihuahua)
+狆(Japanese spaniel)
+マルチーズ(Maltese dog)
+ペキニーズ(Pekinese)
+シーズー(Shih-Tzu)
+ブレンハイムスパニエル(Blenheim spaniel)
+パピヨン(papillon)
+トイテリア(toy terrier)
+ローデシアン・リッジバック(Rhodesian ridgeback)
+アフガンハウンド(Afghan hound)
+バセットハウンド(basset)
+ビーグル(beagle)
+ブラッドハウンド(bloodhound)
+ブルーティック(bluetick)
+ブラック・アンド・タン・クーンハウンド(black-and-tan coonhound)
+ウォーカーハウンド(Walker hound)
+イングリッシュ・フォックスハウンド(English foxhound)
+レッドボーン(redbone)
+ボルゾイ(borzoi)
+アイリッシュ・ウルフハウンド(Irish wolfhound)
+イタリアン・グレーハウンド(Italian greyhound)
+ウィペット(whippet)
+イビザンハウンド(Ibizan hound)
+ノルウェジアン・エルクハウンド(Norwegian elkhound)
+オッターハウンド(otterhound)
+サルーキ(Saluki)
+スコティッシュ・ディアハウンド(Scottish deerhound)
+ワイマラナー(Weimaraner)
+スタッフォードシャー・ブル・テリア(Staffordshire bullterrier)
+アメリカン・スタッフォードシャー・テリア(American Staffordshire terrier)
+ベドリントン・テリア(Bedlington terrier)
+ボーダー・テリア(Border terrier)
+ケリー・ブルー・テリア(Kerry blue terrier)
+アイリッシュ・テリア(Irish terrier)
+ノーフォーク・テリア(Norfolk terrier)
+ノーリッチ・テリア(Norwich terrier)
+ヨークシャー・テリア(Yorkshire terrier)
+ワイアーヘアード・フォックス・テリア(wire-haired fox terrier)
+レークランド・テリア(Lakeland terrier)
+シーリハム・テリア(Sealyham terrier)
+エアデール・テリア(Airedale)
+ケアン・テリア(cairn)
+オーストラリアン・テリア(Australian terrier)
+ダンディ・ディンモント・テリア(Dandie Dinmont)
+ボストン・テリア(Boston bull)
+ミニチュア・シュナウザー(miniature schnauzer)
+ジャイアント・シュナウザー(giant schnauzer)
+スタンダード・シュナウザー(standard schnauzer)
+スコティッシュ・テリア(Scotch terrier)
+チベタン・テリア(Tibetan terrier)
+シルキー・テリア(silky terrier)
+ソフトコーテッド・ウィートン・テリア(soft-coated wheaten terrier)
+ウェスト・ハイランド・ホワイト・テリア(West Highland white terrier)
+ラサ・アプソ(Lhasa)
+フラットコーテッド・レトリバー(flat-coated retriever)
+カーリーコーテッド・レトリバー(curly-coated retriever)
+ゴールデン・レトリバー(golden retriever)
+ラブラドール・レトリバー(Labrador retriever)
+チェサピーク・ベイ・レトリバー(Chesapeake Bay retriever)
+ジャーマン・ショートヘアード・ポインター(German short-haired pointer)
+ビズラ(vizsla)
+イングリッシュ・セター(English setter)
+アイリッシュ・セター(Irish setter)
+ゴードン・セター(Gordon setter)
+ブリタニースパニエル(Brittany spaniel)
+クランバースパニエル(clumber)
+イングリッシュ・スプリンガー・スパニエル(English springer)
+ウェルシュ・スプリンガー・スパニエル(Welsh springer spaniel)
+アメリカン・コッカー・スパニエル(cocker spaniel)
+サセックス・スパニエル(Sussex spaniel)
+アイリッシュ・ウォーター・スパニエル(Irish water spaniel)
+クーバース(kuvasz)
+スキッパーキ(schipperke)
+グローネンダール(groenendael)
+マリノア(malinois)
+ブリアード(briard)
+ケルピー(kelpie)
+コモンドール(komondor)
+オールド・イングリッシュ・シープドッグ(Old English sheepdog)
+シェットランド・シープドッグ(Shetland sheepdog)
+コリー(collie)
+ボーダー・コリー(Border collie)
+ブービエ・デ・フランダース(Bouvier des Flandres)
+ロットワイラー(Rottweiler)
+ジャーマン・シェパード(German shepherd)
+ドーベルマン(Doberman)
+ミニチュア・ピンシャー(miniature pinscher)
+グレーター・スイス・マウンテン・ドッグ(Greater Swiss Mountain dog)
+バーニーズ・マウンテン・ドッグ(Bernese mountain dog)
+アッペンツェラー(Appenzeller)
+エントレブッハー(EntleBucher)
+ボクサー(boxer)
+ブルマスティフ(bull mastiff)
+チベタン・マスティフ(Tibetan mastiff)
+フレンチ・ブルドッグ(French bulldog)
+グレート・デーン(Great Dane)
+セント・バーナード(Saint Bernard)
+アメリカン・エスキモー・ドッグ(Eskimo dog)
+アラスカン・マラミュート(malamute)
+シベリアン・ハスキー(Siberian husky)
+ダルメシアン(dalmatian)
+アーフェンピンシャー(affenpinscher)
+バセンジー(basenji)
+パグ(pug)
+レオンベルガー(Leonberg)
+ニューファンドランド(Newfoundland)
+グレート・ピレニーズ(Great Pyrenees)
+サモエド(Samoyed)
+ポメラニアン(Pomeranian)
+チャウチャウ(chow)
+キースホンド(keeshond)
+ブリュッセル・グリフォン(Brabancon griffon)
+ペンブローク・ウェルシュ・コーギー(Pembroke)
+カーディガン・ウェルシュ・コーギー(Cardigan)
+トイ・プードル(toy poodle)
+ミニチュア・プードル(miniature poodle)
+スタンダード・プードル(standard poodle)
+メキシカン・ヘアレス・ドッグ(Mexican hairless)
+シンリンオオカミ(timber wolf)
+ホッキョクオオカミ(white wolf)
+アメリカアカオオカミ(red wolf)
+コヨーテ(coyote)
+ディンゴ(dingo)
+ドール(dhole)
+リカオン(African hunting dog)
+ハイエナ(hyena)
+アカギツネ(red fox)
+キットギツネ(kit fox)
+ホッキョクギツネ(Arctic fox)
+ハイイロギツネ(grey fox)
+トラ猫(tabby)
+トラ猫(tiger cat)
+ペルシャ猫(Persian cat)
+シャム猫(Siamese cat)
+エジプシャン・マウ(Egyptian cat)
+ピューマ(cougar)
+オオヤマネコ(lynx)
+ヒョウ(leopard)
+ユキヒョウ(snow leopard)
+ジャガー(jaguar)
+ライオン(lion)
+トラ(tiger)
+チーター(cheetah)
+ヒグマ(brown bear)
+アメリカグマ(American black bear)
+ホッキョクグマ(ice bear)
+ナマケグマ(sloth bear)
+マングース(mongoose)
+ミーアキャット(meerkat)
+ハンミョウ(tiger beetle)
+テントウムシ(ladybug)
+オサムシ(ground beetle)
+カミキリムシ(long-horned beetle)
+ハムシ(leaf beetle)
+フンコロガシ(dung beetle)
+カブトムシ(rhinoceros beetle)
+ゾウムシ(weevil)
+ハエ(fly)
+ハチ(bee)
+アリ(ant)
+バッタ(grasshopper)
+コオロギ(cricket)
+ナナフシ(walking stick)
+ゴキブリ(cockroach)
+カマキリ(mantis)
+セミ(cicada)
+ヨコバイ(leafhopper)
+クサカゲロウ(lacewing)
+トンボ(dragonfly)
+イトトンボ(damselfly)
+アカタテハ(admiral)
+ジャノメチョウ(ringlet)
+オオカバマダラ(monarch)
+モンシロチョウ(cabbage butterfly)
+モンキチョウ(sulphur butterfly)
+シジミチョウ(lycaenid)
+ヒトデ(starfish)
+ウニ(sea urchin)
+ナマコ(sea cucumber)
+ワタオウサギ(wood rabbit)
+ノウサギ(hare)
+アンゴラウサギ(Angora)
+ハムスター(hamster)
+ヤマアラシ(porcupine)
+キツネリス(fox squirrel)
+マーモット(marmot)
+ビーバー(beaver)
+モルモット(guinea pig)
+栗毛の馬(sorrel)
+シマウマ(zebra)
+ブタ(hog)
+イノシシ(wild boar)
+イボイノシシ(warthog)
+カバ(hippopotamus)
+雄牛(ox)
+水牛(water buffalo)
+バイソン(bison)
+雄羊(ram)
+ビッグホーン(bighorn)
+アイベックス(ibex)
+ハーテビースト(hartebeest)
+インパラ(impala)
+ガゼル(gazelle)
+ヒトコブラクダ(Arabian camel)
+ラマ(llama)
+イタチ(weasel)
+ミンク(mink)
+ケナガイタチ(polecat)
+クロアシイタチ(black-footed ferret)
+カワウソ(otter)
+スカンク(skunk)
+アナグマ(badger)
+アルマジロ(armadillo)
+ミユビナマケモノ(three-toed sloth)
+オランウータン(orangutan)
+ゴリラ(gorilla)
+チンパンジー(chimpanzee)
+テナガザル(gibbon)
+フクロテナガザル(siamang)
+オナガザル(guenon)
+パタスモンキー(patas)
+ヒヒ(baboon)
+マカク(macaque)
+ラングール(langur)
+コロブス(colobus)
+テングザル(proboscis monkey)
+マーモセット(marmoset)
+オマキザル(capuchin)
+ホエザル(howler monkey)
+ティティ(titi)
+クモザル(spider monkey)
+リスザル(squirrel monkey)
+ワオキツネザル(Madagascar cat)
+インドリ(indri)
+インドゾウ(Indian elephant)
+アフリカゾウ(African elephant)
+レッサーパンダ(lesser panda)
+ジャイアントパンダ(giant panda)
+クロタチカマス(barracouta)
+ウナギ(eel)
+ギンザケ(coho)
+ヌリワケヤッコ(rock beauty)
+クマノミ(anemone fish)
+チョウザメ(sturgeon)
+ガー(gar)
+ミノカサゴ(lionfish)
+フグ(puffer)
+そろばん(abacus)
+アバヤ(abaya)
+アカデミックガウン(academic gown)
+アコーディオン(accordion)
+アコースティックギター(acoustic guitar)
+空母(aircraft carrier)
+旅客機(airliner)
+飛行船(airship)
+祭壇(altar)
+救急車(ambulance)
+水陸両用車(amphibian)
+アナログ時計(analog clock)
+養蜂場(apiary)
+エプロン(apron)
+ゴミ箱(ashcan)
+アサルトライフル(assault rifle)
+バックパック(backpack)
+パン屋(bakery)
+平均台(balance beam)
+気球(balloon)
+ボールペン(ballpoint)
+絆創膏(Band Aid)
+バンジョー(banjo)
+手すり(bannister)
+バーベル(barbell)
+理髪店の椅子(barber chair)
+理髪店(barbershop)
+納屋(barn)
+気圧計(barometer)
+樽(barrel)
+手押し車(barrow)
+野球のボール(baseball)
+バスケットボール(basketball)
+バシネット(bassinet)
+ファゴット(bassoon)
+水泳帽(bathing cap)
+バスタオル(bath towel)
+浴槽(bathtub)
+ステーションワゴン(beach wagon)
+ビーコン(beacon)
+ビーカー(beaker)
+熊皮の帽子(bearskin)
+ビール瓶(beer bottle)
+ビールグラス(beer glass)
+鐘楼(bell cote)
+よだれかけ(bib)
+二人乗り自転車(bicycle-built-for-two)
+ビキニ(bikini)
+バインダー(binder)
+双眼鏡(binoculars)
+巣箱(birdhouse)
+ボートハウス(boathouse)
+ボブスレー(bobsled)
+ループタイ(bolo tie)
+ボンネット(bonnet)
+本棚(bookcase)
+書店(bookshop)
+王冠(bottlecap)
+弓(bow)
+蝶ネクタイ(bow tie)
+真鍮(brass)
+ブラジャー(brassiere)
+防波堤(breakwater)
+胸当て(breastplate)
+ほうき(broom)
+バケツ(bucket)
+バックル(buckle)
+防弾チョッキ(bulletproof vest)
+新幹線(bullet train)
+肉屋(butcher shop)
+タクシー(cab)
+大釜(caldron)
+ろうそく(candle)
+大砲(cannon)
+カヌー(canoe)
+缶切り(can opener)
+カーディガン(cardigan)
+車のミラー(car mirror)
+回転木馬(carousel)
+大工道具セット(carpenter's kit)
+カートン(carton)
+車のホイール(car wheel)
+ATM(cash machine)
+カセット(cassette)
+カセットプレーヤー(cassette player)
+城(castle)
+カタマラン(catamaran)
+CDプレーヤー(CD player)
+チェロ(cello)
+携帯電話(cellular telephone)
+鎖(chain)
+金網フェンス(chainlink fence)
+鎖帷子(chain mail)
+チェーンソー(chain saw)
+整理ダンス(chest)
+シフォニア(chiffonier)
+チャイム(chime)
+食器棚(china cabinet)
+クリスマス靴下(Christmas stocking)
+教会(church)
+映画館(cinema)
+包丁(cleaver)
+崖の住居(cliff dwelling)
+マント(cloak)
+木靴(clog)
+カクテルシェイカー(cocktail shaker)
+マグカップ(coffee mug)
+コーヒーポット(coffeepot)
+コイル(coil)
+ダイヤル錠(combination lock)
+コンピュータキーボード(computer keyboard)
+菓子店(confectionery)
+コンテナ船(container ship)
+コンバーチブル(convertible)
+コルク抜き(corkscrew)
+コルネット(cornet)
+カウボーイブーツ(cowboy boot)
+カウボーイハット(cowboy hat)
+ゆりかご(cradle)
+クレーン(crane)
+ヘルメット(crash helmet)
+木箱(crate)
+ベビーベッド(crib)
+電気鍋(Crock Pot)
+クロッケーボール(croquet ball)
+松葉杖(crutch)
+胸甲(cuirass)
+ダム(dam)
+机(desk)
+デスクトップパソコン(desktop computer)
+ダイヤル式電話(dial telephone)
+おむつ(diaper)
+デジタル時計(digital clock)
+デジタル腕時計(digital watch)
+ダイニングテーブル(dining table)
+布巾(dishrag)
+食器洗い機(dishwasher)
+ディスクブレーキ(disk brake)
+ドック(dock)
+犬ぞり(dogsled)
+ドーム(dome)
+ドアマット(doormat)
+掘削プラットフォーム(drilling platform)
+ドラム(drum)
+ドラムスティック(drumstick)
+ダンベル(dumbbell)
+ダッチオーブン(Dutch oven)
+扇風機(electric fan)
+エレキギター(electric guitar)
+電気機関車(electric locomotive)
+エンターテインメントセンター(entertainment center)
+封筒(envelope)
+エスプレッソマシン(espresso maker)
+フェイスパウダー(face powder)
+羽毛のボア(feather boa)
+やすり(file)
+消防艇(fireboat)
+消防車(fire engine)
+暖炉のスクリーン(fire screen)
+旗竿(flagpole)
+フルート(flute)
+折りたたみ椅子(folding chair)
+フットボールヘルメット(football helmet)
+フォークリフト(forklift)
+噴水(fountain)
+万年筆(fountain pen)
+四柱式ベッド(four-poster)
+貨車(freight car)
+フレンチホルン(French horn)
+フライパン(frying pan)
+毛皮のコート(fur coat)
+ゴミ収集車(garbage truck)
+ガスマスク(gasmask)
+ガソリン給油機(gas pump)
+ゴブレット(goblet)
+ゴーカート(go-kart)
+ゴルフボール(golf ball)
+ゴルフカート(golfcart)
+ゴンドラ(gondola)
+銅鑼(gong)
+ガウン(gown)
+グランドピアノ(grand piano)
+温室(greenhouse)
+ラジエーターグリル(grille)
+食料品店(grocery store)
+ギロチン(guillotine)
+髪留め(hair slide)
+ヘアスプレー(hair spray)
+ハーフトラック(half track)
+ハンマー(hammer)
+洗濯かご(hamper)
+ハンドドライヤー(hand blower)
+ハンドヘルドコンピュータ(hand-held computer)
+ハンカチ(handkerchief)
+ハードディスク(hard disc)
+ハーモニカ(harmonica)
+ハープ(harp)
+収穫機(harvester)
+手斧(hatchet)
+ホルスター(holster)
+ホームシアター(home theater)
+ハチの巣(honeycomb)
+フック(hook)
+フープスカート(hoopskirt)
+鉄棒(horizontal bar)
+荷馬車(horse cart)
+砂時計(hourglass)
+iPod(iPod)
+アイロン(iron)
+ジャック・オー・ランタン(jack-o'-lantern)
+ジーンズ(jean)
+ジープ(jeep)
+ジャージ(jersey)
+ジグソーパズル(jigsaw puzzle)
+人力車(jinrikisha)
+ジョイスティック(joystick)
+着物(kimono)
+膝当て(knee pad)
+結び目(knot)
+白衣(lab coat)
+おたま(ladle)
+ランプシェード(lampshade)
+ノートパソコン(laptop)
+芝刈り機(lawn mower)
+レンズキャップ(lens cap)
+ペーパーナイフ(letter opener)
+図書館(library)
+救命ボート(lifeboat)
+ライター(lighter)
+リムジン(limousine)
+定期船(liner)
+口紅(lipstick)
+ローファー(Loafer)
+ローション(lotion)
+スピーカー(loudspeaker)
+ルーペ(loupe)
+製材所(lumbermill)
+磁気コンパス(magnetic compass)
+郵便袋(mailbag)
+郵便受け(mailbox)
+レオタード(maillot)
+タンクスーツ(maillot)
+マンホールの蓋(manhole cover)
+マラカス(maraca)
+マリンバ(marimba)
+仮面(mask)
+マッチ棒(matchstick)
+メイポール(maypole)
+迷路(maze)
+計量カップ(measuring cup)
+薬棚(medicine chest)
+巨石記念物(megalith)
+マイク(microphone)
+電子レンジ(microwave)
+軍服(military uniform)
+ミルク缶(milk can)
+ミニバス(minibus)
+ミニスカート(miniskirt)
+ミニバン(minivan)
+ミサイル(missile)
+ミトン(mitten)
+ボウル(mixing bowl)
+移動住宅(mobile home)
+T型フォード(Model T)
+モデム(modem)
+修道院(monastery)
+モニター(monitor)
+モペッド(moped)
+乳鉢(mortar)
+角帽(mortarboard)
+モスク(mosque)
+蚊帳(mosquito net)
+スクーター(motor scooter)
+マウンテンバイク(mountain bike)
+マウンテンテント(mountain tent)
+マウス(mouse)
+ネズミ捕り(mousetrap)
+引越しトラック(moving van)
+口輪(muzzle)
+釘(nail)
+首用コルセット(neck brace)
+ネックレス(necklace)
+哺乳瓶の乳首(nipple)
+ノートパソコン(notebook)
+オベリスク(obelisk)
+オーボエ(oboe)
+オカリナ(ocarina)
+走行距離計(odometer)
+オイルフィルター(oil filter)
+オルガン(organ)
+オシロスコープ(oscilloscope)
+オーバースカート(overskirt)
+牛車(oxcart)
+酸素マスク(oxygen mask)
+小包(packet)
+パドル(paddle)
+外輪(paddlewheel)
+南京錠(padlock)
+絵筆(paintbrush)
+パジャマ(pajama)
+宮殿(palace)
+パンパイプ(panpipe)
+ペーパータオル(paper towel)
+パラシュート(parachute)
+平行棒(parallel bars)
+公園のベンチ(park bench)
+パーキングメーター(parking meter)
+客車(passenger car)
+パティオ(patio)
+公衆電話(pay-phone)
+台座(pedestal)
+筆箱(pencil box)
+鉛筆削り(pencil sharpener)
+香水(perfume)
+シャーレ(Petri dish)
+コピー機(photocopier)
+ピック(pick)
+ピッケルハウベ(pickelhaube)
+杭のフェンス(picket fence)
+ピックアップトラック(pickup)
+桟橋(pier)
+貯金箱(piggy bank)
+薬瓶(pill bottle)
+枕(pillow)
+ピンポン玉(ping-pong ball)
+風車(pinwheel)
+海賊(pirate)
+水差し(pitcher)
+かんな(plane)
+プラネタリウム(planetarium)
+ビニール袋(plastic bag)
+皿水切り(plate rack)
+鋤(plow)
+ラバーカップ(plunger)
+ポラロイドカメラ(Polaroid camera)
+ポール(pole)
+護送車(police van)
+ポンチョ(poncho)
+ビリヤード台(pool table)
+炭酸飲料の瓶(pop bottle)
+植木鉢(pot)
+ろくろ(potter's wheel)
+電動ドリル(power drill)
+礼拝用マット(prayer rug)
+プリンター(printer)
+刑務所(prison)
+発射体(projectile)
+プロジェクター(projector)
+パック(puck)
+パンチングボール(punching bag)
+ハンドバッグ(purse)
+羽ペン(quill)
+キルト(quilt)
+レーシングカー(racer)
+ラケット(racket)
+ラジエーター(radiator)
+ラジオ(radio)
+電波望遠鏡(radio telescope)
+雨水樽(rain barrel)
+キャンピングカー(recreational vehicle)
+リール(reel)
+一眼レフカメラ(reflex camera)
+冷蔵庫(refrigerator)
+リモコン(remote control)
+レストラン(restaurant)
+リボルバー(revolver)
+ライフル(rifle)
+ロッキングチェア(rocking chair)
+回転焼き機(rotisserie)
+消しゴム(rubber eraser)
+ラグビーボール(rugby ball)
+定規(rule)
+ランニングシューズ(running shoe)
+金庫(safe)
+安全ピン(safety pin)
+塩入れ(saltshaker)
+サンダル(sandal)
+サロン(sarong)
+サックス(sax)
+鞘(scabbard)
+秤(scale)
+スクールバス(school bus)
+スクーナー船(schooner)
+スコアボード(scoreboard)
+スクリーン(screen)
+ネジ(screw)
+ドライバー(screwdriver)
+シートベルト(seat belt)
+ミシン(sewing machine)
+盾(shield)
+靴屋(shoe shop)
+障子(shoji)
+買い物かご(shopping basket)
+ショッピングカート(shopping cart)
+シャベル(shovel)
+シャワーキャップ(shower cap)
+シャワーカーテン(shower curtain)
+スキー板(ski)
+目出し帽(ski mask)
+寝袋(sleeping bag)
+計算尺(slide rule)
+引き戸(sliding door)
+スロットマシン(slot)
+シュノーケル(snorkel)
+スノーモービル(snowmobile)
+除雪車(snowplow)
+石鹸ディスペンサー(soap dispenser)
+サッカーボール(soccer ball)
+靴下(sock)
+太陽集熱器(solar dish)
+ソンブレロ(sombrero)
+スープ皿(soup bowl)
+スペースキー(space bar)
+スペースヒーター(space heater)
+スペースシャトル(space shuttle)
+へら(spatula)
+モーターボート(speedboat)
+クモの巣(spider web)
+スピンドル(spindle)
+スポーツカー(sports car)
+スポットライト(spotlight)
+ステージ(stage)
+蒸気機関車(steam locomotive)
+鋼製アーチ橋(steel arch bridge)
+スチールドラム(steel drum)
+聴診器(stethoscope)
+ストール(stole)
+石垣(stone wall)
+ストップウォッチ(stopwatch)
+ストーブ(stove)
+ざる(strainer)
+路面電車(streetcar)
+ストレッチャー(stretcher)
+スタジオカウチ(studio couch)
+仏塔(stupa)
+潜水艦(submarine)
+スーツ(suit)
+日時計(sundial)
+サングラス(sunglass)
+サングラス(sunglasses)
+日焼け止め(sunscreen)
+吊り橋(suspension bridge)
+モップ(swab)
+スウェット(sweatshirt)
+海水パンツ(swimming trunks)
+ブランコ(swing)
+スイッチ(switch)
+注射器(syringe)
+電気スタンド(table lamp)
+戦車(tank)
+テーププレーヤー(tape player)
+ティーポット(teapot)
+テディベア(teddy)
+テレビ(television)
+テニスボール(tennis ball)
+茅葺き屋根(thatch)
+劇場の幕(theater curtain)
+指ぬき(thimble)
+脱穀機(thresher)
+玉座(throne)
+瓦屋根(tile roof)
+トースター(toaster)
+タバコ屋(tobacco shop)
+便座(toilet seat)
+たいまつ(torch)
+トーテムポール(totem pole)
+レッカー車(tow truck)
+おもちゃ屋(toyshop)
+トラクター(tractor)
+トレーラートラック(trailer truck)
+トレイ(tray)
+トレンチコート(trench coat)
+三輪車(tricycle)
+トライマラン(trimaran)
+三脚(tripod)
+凱旋門(triumphal arch)
+トロリーバス(trolleybus)
+トロンボーン(trombone)
+浴槽(tub)
+改札口(turnstile)
+タイプライターのキーボード(typewriter keyboard)
+傘(umbrella)
+一輪車(unicycle)
+アップライトピアノ(upright)
+掃除機(vacuum)
+花瓶(vase)
+地下室(vault)
+ベルベット(velvet)
+自動販売機(vending machine)
+祭服(vestment)
+高架橋(viaduct)
+バイオリン(violin)
+バレーボール(volleyball)
+ワッフル焼き器(waffle iron)
+壁掛け時計(wall clock)
+財布(wallet)
+洋服ダンス(wardrobe)
+軍用機(warplane)
+洗面器(washbasin)
+洗濯機(washer)
+水筒(water bottle)
+水差し(water jug)
+給水塔(water tower)
+ウイスキーの水差し(whiskey jug)
+ホイッスル(whistle)
+かつら(wig)
+網戸(window screen)
+ブラインド(window shade)
+ウィンザータイ(Windsor tie)
+ワインボトル(wine bottle)
+翼(wing)
+中華鍋(wok)
+木のスプーン(wooden spoon)
+毛糸(wool)
+蛇腹フェンス(worm fence)
+難破船(wreck)
+ヨール船(yawl)
+ゲル(yurt)
+ウェブサイト(web site)
+コミック本(comic book)
+クロスワードパズル(crossword puzzle)
+道路標識(street sign)
+信号機(traffic light)
+ブックカバー(book jacket)
+メニュー(menu)
+皿(plate)
+ワカモレ(guacamole)
+コンソメ(consomme)
+鍋料理(hot pot)
+トライフル(trifle)
+アイスクリーム(ice cream)
+アイスキャンディー(ice lolly)
+フランスパン(French loaf)
+ベーグル(bagel)
+プレッツェル(pretzel)
+チーズバーガー(cheeseburger)
+ホットドッグ(hotdog)
+マッシュポテト(mashed potato)
+キャベツ(head cabbage)
+ブロッコリー(broccoli)
+カリフラワー(cauliflower)
+ズッキーニ(zucchini)
+そうめんかぼちゃ(spaghetti squash)
+ドングリカボチャ(acorn squash)
+バターナッツカボチャ(butternut squash)
+キュウリ(cucumber)
+アーティチョーク(artichoke)
+ピーマン(bell pepper)
+カルドーン(cardoon)
+キノコ(mushroom)
+グラニースミス(Granny Smith)
+イチゴ(strawberry)
+オレンジ(orange)
+レモン(lemon)
+イチジク(fig)
+パイナップル(pineapple)
+バナナ(banana)
+パラミツ(jackfruit)
+バンレイシ(custard apple)
+ザクロ(pomegranate)
+干し草(hay)
+カルボナーラ(carbonara)
+チョコレートソース(chocolate sauce)
+パン生地(dough)
+ミートローフ(meat loaf)
+ピザ(pizza)
+ポットパイ(potpie)
+ブリトー(burrito)
+赤ワイン(red wine)
+エスプレッソ(espresso)
+カップ(cup)
+エッグノッグ(eggnog)
+アルプス(alp)
+泡(bubble)
+崖(cliff)
+サンゴ礁(coral reef)
+間欠泉(geyser)
+湖畔(lakeside)
+岬(promontory)
+砂州(sandbar)
+海岸(seashore)
+谷(valley)
+火山(volcano)
+野球選手(ballplayer)
+新郎(groom)
+スキューバダイバー(scuba diver)
+菜種(rapeseed)
+ヒナギク(daisy)
+キバナアツモリソウ(yellow lady's slipper)
+トウモロコシ(corn)
+ドングリ(acorn)
+バラの実(hip)
+トチノキ(buckeye)
+ホウキタケ(coral fungus)
+ハラタケ(agaric)
+シャグマアミガサタケ(gyromitra)
+スッポンタケ(stinkhorn)
+ツチグリ(earthstar)
+マイタケ(hen-of-the-woods)
+イグチ(bolete)
+穂(ear)
+トイレットペーパー(toilet tissue)

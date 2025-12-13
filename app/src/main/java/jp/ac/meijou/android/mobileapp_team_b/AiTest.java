@@ -1,12 +1,15 @@
 package jp.ac.meijou.android.mobileapp_team_b;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +48,9 @@ public class AiTest extends AppCompatActivity {
 
     // ギャラリー用ランチャー（onCreate で初期化する）
     private ActivityResultLauncher<Intent> pickImageLauncher;
+
+    // 判定されたラベル名を保持しておく変数
+    private String detectedLabelName = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +126,17 @@ public class AiTest extends AppCompatActivity {
         // 「画像選択」ボタン → ギャラリーを開く
         binding.ImagePickButton.setOnClickListener(view -> openGallery());
 
+
+        // 判定された画像をフォルダに移動するボタンの動作
+        binding.addFolderButton.setOnClickListener((view ->{
+            if (selectedBitmap != null && detectedLabelName != null) {
+                saveImageToFolder(selectedBitmap, detectedLabelName);
+            } else {
+                Toast.makeText(this, "先にAI判定を行ってください", Toast.LENGTH_SHORT).show();
+            }
+        }));
+
+
         // システムバー分だけパディング
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -148,6 +166,14 @@ public class AiTest extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickImageLauncher.launch(intent);
     }
+
+    // 判定結果のリセット処理
+    private void resetResult() {
+        detectedLabelName = null;
+        binding.AISampleResultText.setText("判定ボタンを押してください");
+        binding.addFolderButton.setEnabled(false); // ボタンを押せないようにする
+    }
+
 
     // 今選択されている画像を判定
     private void classifyImage() {
@@ -192,6 +218,10 @@ public class AiTest extends AppCompatActivity {
                 labelName = "Unknown(" + labelIndex + ")";
             }
 
+            // 判定結果を変数に保存し、ボタンを有効化する
+            detectedLabelName = labelName; // 例: "cat"
+            binding.addFolderButton.setEnabled(true); // 保存ボタンを押せるようにする
+
             String resultText = "予測: " + labelIndex + " , " + labelName
                     + "\n信頼度: " + String.format("%.2f", (score * 100)) + " %";
             binding.AISampleResultText.setText(resultText);
@@ -199,6 +229,52 @@ public class AiTest extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             binding.AISampleResultText.setText("エラー: " + e.getClass().getSimpleName());
+        }
+    }
+
+    // 画像を指定したフォルダ名のフォルダに保存するメソッド
+    private void saveImageToFolder(Bitmap bitmap, String folderName) {
+        // フォルダ名に使えない文字などを除去（念のため）
+        String safeFolderName = folderName.replaceAll("[^a-zA-Z0-9_\\- ]", "");
+        if (safeFolderName.isEmpty()) safeFolderName = "Other";
+
+        // 保存するファイル名を作成 (例: cat_123456789.jpg)
+        String fileName = safeFolderName + "_" + System.currentTimeMillis() + ".jpg";
+
+        // 保存場所の設定
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+
+        // Android 10以上: RELATIVE_PATH でフォルダを指定（自動作成される）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/" + safeFolderName);
+            values.put(MediaStore.Images.Media.IS_PENDING, 1);
+        } else {
+            // Android 9以下: 従来のパス指定（今回は省略するが、通常はFile操作が必要）
+        }
+
+        Uri collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri itemUri = getContentResolver().insert(collection, values);
+
+        if (itemUri != null) {
+            try (OutputStream out = getContentResolver().openOutputStream(itemUri)) {
+                // 画像を書き込む
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+                // 書き込み完了設定 (Android 10+)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    values.clear();
+                    values.put(MediaStore.Images.Media.IS_PENDING, 0);
+                    getContentResolver().update(itemUri, values, null, null);
+                }
+
+                Toast.makeText(this, "「" + safeFolderName + "」フォルダに保存しました", Toast.LENGTH_LONG).show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "保存に失敗しました", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
