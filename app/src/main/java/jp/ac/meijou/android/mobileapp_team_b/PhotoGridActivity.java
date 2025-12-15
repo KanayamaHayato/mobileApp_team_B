@@ -518,30 +518,31 @@ public class PhotoGridActivity extends AppCompatActivity {
             return;
         }
 
-        // Android 11 (API 30) 以上の場合: まとめて許可を取る最新の方法
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // 削除リクエストを作成 (dataリストに入っている全URIを渡す)
+        // Android 11以上で、かつ「権限を持っていない」場合のみダイアログを出す
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+            // 権限がないので、システム標準の削除リクエストを使う（ダイアログが出る）
             android.app.PendingIntent pi = MediaStore.createDeleteRequest(getContentResolver(), data);
             try {
-                // システムの「〇枚の画像を削除しますか？」画面を出す
                 startIntentSenderForResult(pi.getIntentSender(), REQUEST_DELETE_ALL, null, 0, 0, 0, null);
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
             }
         }
-        // Android 10 以下の場合: ループして削除 (従来の方法)
+        // Android 10以下、または「権限を持っている」場合はこちら（直接削除）
         else {
+            // 許可を得ているので、Threadを使ってバックグラウンドで一気に消す
             new Thread(() -> {
                 int deleteCount = 0;
-                for (Uri uri : data) {
+                // 削除中にリストを変更しないよう、念のためコピーしたリストで回す
+                List<Uri> targetUris = new ArrayList<>(data);
+
+                for (Uri uri : targetUris) {
                     try {
-                        // 1件ずつ削除
+                        // 1件ずつ直接削除 (権限があればダイアログは出ない)
                         getContentResolver().delete(uri, null, null);
                         deleteCount++;
                     } catch (Exception e) {
                         e.printStackTrace();
-                        // Android 10の場合、ここでRecoverableSecurityExceptionが出る可能性がありますが
-                        // 一括削除で1件ずつ許可を取るのはUXが悪いため、今回はスキップします
                     }
                 }
 
@@ -559,5 +560,4 @@ public class PhotoGridActivity extends AppCompatActivity {
             }).start();
         }
     }
-
 }
