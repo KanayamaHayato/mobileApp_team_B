@@ -75,6 +75,14 @@ public class FolderFragment extends Fragment {
         super.onResume();
         // データを再読み込みする
         ensurePermissionAndLoad();
+
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void refreshTheme() {
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 
 

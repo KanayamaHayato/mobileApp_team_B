@@ -2,6 +2,7 @@ package jp.ac.meijou.android.mobileapp_team_b;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -10,19 +11,25 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.io.ByteArrayOutputStream;
 
@@ -36,10 +43,46 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<String> cameraPermissionLauncher;
 
+    // テーマ替え
+    private ConstraintLayout mainLayout;
+    private View topBackground;
+    private MaterialButton cameraButton;
+    private Switch themeSwitch;
+    private MainPagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        //テーマ替え
+        mainLayout = binding.main;                  // ← layoutの android:id="@+id/main"
+        topBackground = binding.topBackground;      // ← Viewの android:id="@+id/topBackground"
+        cameraButton = binding.buttonCamera;
+        themeSwitch = binding.switch3;
+
+        // 初期テーマ（緑紫で開始するなら）
+        setGreenPurpleTheme();
+        themeSwitch.setChecked(false);
+        themeSwitch.setText("青 × ピンク");
+
+        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            ThemeManager.setBluePink(isChecked);
+
+            if (isChecked) {
+                setBluePinkTheme();
+                themeSwitch.setText("緑 × 紫");
+            } else {
+                setGreenPurpleTheme();
+                themeSwitch.setText("青 × ピンク");
+            }
+            if (binding.viewPager.getCurrentItem() == 0 && pagerAdapter != null) {
+                pagerAdapter.getFolderFragment().refreshTheme();
+            }
+        });
 
         // Android 11 (API 30) 以上の場合、強力な権限を取りに行く
         if (Build.VERSION.SDK_INT >= 30) {
@@ -60,10 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
 
         // --- カメラ権限リクエスト用ランチャー ---
         cameraPermissionLauncher =
@@ -103,11 +142,12 @@ public class MainActivity extends AppCompatActivity {
                 );
 
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
 
 
 
@@ -145,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }));
 
-
+        /*
         // ダークモード
         binding.switch3.setOnClickListener(v ->{
         boolean isChecked = binding.switch3.isChecked();
@@ -173,8 +213,10 @@ public class MainActivity extends AppCompatActivity {
             tabTextColor = ContextCompat.getColor(this, R.color.light_text);
             binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
         }
-        });
-        binding.viewPager.setAdapter(new MainPagerAdapter(this));
+        });*/
+        pagerAdapter = new MainPagerAdapter(this);
+        binding.viewPager.setAdapter(pagerAdapter);
+
 
         new com.google.android.material.tabs.TabLayoutMediator(
                 binding.tabLayout,
@@ -189,17 +231,61 @@ public class MainActivity extends AppCompatActivity {
         ).attach();
     }
     static class MainPagerAdapter extends androidx.viewpager2.adapter.FragmentStateAdapter {
+        private final FolderFragment folderFragment = new FolderFragment();
+        private final RecentFragment recentFragment = new RecentFragment();
+        private final OtherFragment otherFragment = new OtherFragment();
+
         public MainPagerAdapter(AppCompatActivity activity) { super(activity); }
+
         @Override public int getItemCount() { return 3; }
+
         @Override public androidx.fragment.app.Fragment createFragment(int position) {
-            if (position == 0) return new FolderFragment();   // ← ココがカテゴリ
-            else if (position == 1) return new RecentFragment(); // ダミーでもOK
-            else return new OtherFragment();                    // ダミーでもOK
+            if (position == 0) return folderFragment;
+            else if (position == 1) return recentFragment;
+            else return otherFragment;
+        }
+
+        public FolderFragment getFolderFragment() {
+            return folderFragment;
         }
     }
+
 
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraLauncher.launch(intent);
     }
+
+    //緑紫テーマ
+    private void setGreenPurpleTheme() {
+        int bg = ContextCompat.getColor(this, R.color.gp_background);
+        int title = ContextCompat.getColor(this, R.color.gp_title_background);
+        int btn = ContextCompat.getColor(this, R.color.gp_button);
+        int stroke = ContextCompat.getColor(this, R.color.gp_button_stroke);
+
+        binding.main.setBackgroundColor(bg);
+        binding.topBackground.setBackgroundColor(title);
+
+        binding.tabLayout.setBackgroundColor(title); // ← TabLayoutも変える
+
+        cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        cameraButton.setStrokeColor(ColorStateList.valueOf(stroke)); // ← 淵も変える
+    }
+
+    //青ピンクテーマ
+    private void setBluePinkTheme() {
+        int bg = ContextCompat.getColor(this, R.color.bp_background);
+        int title = ContextCompat.getColor(this, R.color.bp_title_background);
+        int btn = ContextCompat.getColor(this, R.color.bp_button);
+        int stroke = ContextCompat.getColor(this, R.color.bp_button_stroke);
+
+        binding.main.setBackgroundColor(bg);
+        binding.topBackground.setBackgroundColor(title);
+
+        binding.tabLayout.setBackgroundColor(title);
+
+        cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        cameraButton.setStrokeColor(ColorStateList.valueOf(stroke));
+    }
+
 }
