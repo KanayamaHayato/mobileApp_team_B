@@ -2,6 +2,7 @@ package jp.ac.meijou.android.mobileapp_team_b;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -10,13 +11,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -25,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.io.ByteArrayOutputStream;
@@ -39,7 +43,13 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<String> cameraPermissionLauncher;
 
-    // 検索用
+    // テーマ替え（KNY_br9側）
+    private ConstraintLayout mainLayout;
+    private View topBackground;
+    private MaterialButton cameraButton;
+    private Switch themeSwitch;
+
+    // 検索用（master側）
     private SearchController searchController;
 
     // ViewPager用
@@ -50,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        // Android 11 (API 30) 以上: 全ファイル管理権限（※必要なら）
+        // Android 11 (API 30) 以上: 全ファイル管理権限（必要なら）
         if (Build.VERSION.SDK_INT >= 30) {
             if (!Environment.isExternalStorageManager()) {
                 Toast.makeText(this, "「すべてのファイルの管理」を許可してください", Toast.LENGTH_LONG).show();
@@ -66,16 +76,49 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // binding はここで1回だけ
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // --- カメラ権限リクエスト用ランチャー ---
+        // -----------------------
+        // テーマ替え（統合）
+        // -----------------------
+        mainLayout = binding.main;
+        topBackground = binding.topBackground;
+        cameraButton = binding.buttonCamera;
+        themeSwitch = binding.switch3;
+
+        setGreenPurpleTheme();
+        themeSwitch.setChecked(false);
+        themeSwitch.setText("青 × ピンク");
+
+        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            ThemeManager.setBluePink(isChecked);
+
+            if (isChecked) {
+                setBluePinkTheme();
+                themeSwitch.setText("緑 × 紫");
+            } else {
+                setGreenPurpleTheme();
+                themeSwitch.setText("青 × ピンク");
+            }
+
+            // もしフォルダFragmentがテーマ反映メソッド持ってるなら
+            Fragment f = pagerAdapter.getFragment(0);
+            if (f instanceof FolderFragment) {
+                ((FolderFragment) f).refreshTheme();
+            }
+        });
+
+        // -----------------------
+        // カメラランチャー
+        // -----------------------
         cameraPermissionLauncher =
                 registerForActivityResult(
                         new ActivityResultContracts.RequestPermission(),
@@ -85,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
 
-        // --- カメラ結果を受け取るランチャー ---
         cameraLauncher =
                 registerForActivityResult(
                         new ActivityResultContracts.StartActivityForResult(),
@@ -108,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
 
-        // --- Cameraボタン ---
+        // Cameraボタン
         binding.buttonCamera.setOnClickListener(view -> {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -118,39 +160,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // --- AITestボタン ---
+        // AITestボタン
         binding.aiTestButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, AiTest.class);
             startActivity(intent);
         });
 
-        // --- ダークモード（今の君の処理を保持：必要なとこだけ） ---
-        binding.switch3.setOnClickListener(v -> {
-            boolean isChecked = binding.switch3.isChecked();
-            int tabTextColor;
-
-            if (isChecked) {
-                binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
-                binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
-                binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
-
-                EditText searchEditText = binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-                // ここで searchEditText の色変更とかもできる
-
-                tabTextColor = ContextCompat.getColor(this, R.color.dark_text);
-                binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
-
-            } else {
-                binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
-                binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
-                binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.light_text));
-
-                tabTextColor = ContextCompat.getColor(this, R.color.light_text);
-                binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
-            }
-        });
-
-        // --- ViewPager2 & TabLayout ---
+        // -----------------------
+        // ViewPager2 & TabLayout
+        // -----------------------
         pagerAdapter = new MainPagerAdapter(this);
         binding.viewPager.setAdapter(pagerAdapter);
 
@@ -166,15 +184,12 @@ public class MainActivity extends AppCompatActivity {
                 }
         ).attach();
 
-        // =====================
-        // 検索機能の配線（ここから）
-        // =====================
+        // -----------------------
+        // 検索機能（統合）
+        // -----------------------
         searchController = new SearchController();
-
-        // 最初のタブを検索対象に
         setSearchTargetForPosition(0);
 
-        // SearchView → SearchController
         binding.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -188,13 +203,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        // タブ切替で検索対象Fragmentを更新
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 setSearchTargetForPosition(position);
-                // 現在の検索文字を新しいタブにも反映（したい場合）
                 searchController.onQueryChanged(binding.searchView.getQuery().toString());
             }
         });
@@ -211,25 +223,52 @@ public class MainActivity extends AppCompatActivity {
         cameraLauncher.launch(intent);
     }
 
-    // ViewPager2 Adapter（Fragmentを保持するので、検索対象を確実に取れる）
+    // 緑紫テーマ
+    private void setGreenPurpleTheme() {
+        int bg = ContextCompat.getColor(this, R.color.gp_background);
+        int title = ContextCompat.getColor(this, R.color.gp_title_background);
+        int btn = ContextCompat.getColor(this, R.color.gp_button);
+        int stroke = ContextCompat.getColor(this, R.color.gp_button_stroke);
+
+        binding.main.setBackgroundColor(bg);
+        binding.topBackground.setBackgroundColor(title);
+        binding.tabLayout.setBackgroundColor(title);
+
+        cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        cameraButton.setStrokeColor(ColorStateList.valueOf(stroke));
+    }
+
+    // 青ピンクテーマ
+    private void setBluePinkTheme() {
+        int bg = ContextCompat.getColor(this, R.color.bp_background);
+        int title = ContextCompat.getColor(this, R.color.bp_title_background);
+        int btn = ContextCompat.getColor(this, R.color.bp_button);
+        int stroke = ContextCompat.getColor(this, R.color.bp_button_stroke);
+
+        binding.main.setBackgroundColor(bg);
+        binding.topBackground.setBackgroundColor(title);
+        binding.tabLayout.setBackgroundColor(title);
+
+        cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        cameraButton.setStrokeColor(ColorStateList.valueOf(stroke));
+    }
+
+    // Fragmentを保持するAdapter（検索対象を確実に取れる）
     static class MainPagerAdapter extends FragmentStateAdapter {
 
         private final Fragment[] fragments = new Fragment[] {
-                new FolderFragment(),   // カテゴリ
-                new RecentFragment(),   // 最近
-                new OtherFragment()     // その他
+                new FolderFragment(),
+                new RecentFragment(),
+                new OtherFragment()
         };
 
         public MainPagerAdapter(AppCompatActivity activity) { super(activity); }
 
         @Override public int getItemCount() { return fragments.length; }
 
-        @Override public Fragment createFragment(int position) {
-            return fragments[position];
-        }
+        @Override public Fragment createFragment(int position) { return fragments[position]; }
 
-        public Fragment getFragment(int position) {
-            return fragments[position];
-        }
+        public Fragment getFragment(int position) { return fragments[position]; }
     }
 }
+

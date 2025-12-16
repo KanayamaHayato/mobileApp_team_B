@@ -4,12 +4,14 @@
     android:layout_margin="8dp" card_view:cardCornerRadius="12dp">
 
     <RelativeLayout
-        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:id="@+id/bucketRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="8dp"
-        android:background="@color/bucket_background"
-        >
+        android:background="@color/gp_bucket_background">
 
-        <ImageView
+
+    <ImageView
             android:id="@+id/imgCover"
             android:layout_width="100dp" android:layout_height="match_parent"
             android:scaleType="centerCrop"

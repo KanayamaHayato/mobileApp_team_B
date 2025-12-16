@@ -86,6 +86,14 @@ public class FolderFragment extends Fragment implements Searchable {
     public void onResume() {
         super.onResume();
         ensurePermissionAndLoad();
+
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void refreshTheme() {
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 
     // 必要な権限を持っているかを確認(無ければポップアップを出して要求)

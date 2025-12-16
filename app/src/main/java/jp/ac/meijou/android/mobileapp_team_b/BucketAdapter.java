@@ -6,6 +6,7 @@ import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.List;
@@ -25,12 +26,13 @@ public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        ImageView imgCover; TextView txtName; TextView txtCount;
+        ImageView imgCover; TextView txtName; TextView txtCount; View bucketRoot;
         VH(@NonNull View v) {
             super(v);
             imgCover = v.findViewById(R.id.imgCover);
             txtName  = v.findViewById(R.id.txtName);
             txtCount = v.findViewById(R.id.txtCount);
+            bucketRoot = v.findViewById(R.id.bucketRoot);
         }
     }
 
@@ -42,6 +44,15 @@ public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
     // データを表示
     @Override public void onBindViewHolder(@NonNull VH h, int pos) {
         Bucket b = items.get(pos);
+        //テーマによる bucket 背景切替
+        int bgRes = ThemeManager.isBluePink()
+                ? R.color.bp_bucket_background
+                : R.color.gp_bucket_background;
+
+        h.bucketRoot.setBackgroundColor(
+                ContextCompat.getColor(ctx, bgRes)
+        );
+
         h.txtName.setText(b.bucketName == null ? "(Unknown)" : b.bucketName); // フォルダ名を表示
         h.txtCount.setText(b.count + " 枚"); //写真の枚数を表示
 

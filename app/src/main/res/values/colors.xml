@@ -3,4 +3,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 <!--    <color name="ic_launcher_background">#3DDC84</color>-->
+    <!-- Theme A : 緑 + 紫 -->
+    <color name="gp_background">#E8F5E9</color>
+    <color name="gp_title_background">#C8E6C9</color>
+    <color name="gp_button">#664FA3</color>
+    <color name="gp_button_stroke">#8A70BA</color>
+    <color name="gp_bucket_background">#DEFFE0</color>
+
+    <!-- Theme B : 薄い青 + ピンク -->
+    <color name="bp_background">#E3F2FD</color>
+    <color name="bp_title_background">#BBDEFB</color>
+    <color name="bp_button">#FF9EC0</color>
+    <color name="bp_button_stroke">#FFD6DF</color>
+    <color name="bp_bucket_background">#DDC5DE</color>
+
 </resources>
