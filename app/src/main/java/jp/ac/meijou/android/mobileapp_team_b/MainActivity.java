@@ -3,7 +3,6 @@ package jp.ac.meijou.android.mobileapp_team_b;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,18 +10,22 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.io.ByteArrayOutputStream;
 
@@ -32,54 +35,57 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    // カメラ用ランチャーを追加
+    // カメラ用
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<String> cameraPermissionLauncher;
+
+    // 検索用
+    private SearchController searchController;
+
+    // ViewPager用
+    private MainPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        // Android 11 (API 30) 以上の場合、強力な権限を取りに行く
+        // Android 11 (API 30) 以上: 全ファイル管理権限（※必要なら）
         if (Build.VERSION.SDK_INT >= 30) {
-            // まだ権限を持っていない場合だけ実行
             if (!Environment.isExternalStorageManager()) {
                 Toast.makeText(this, "「すべてのファイルの管理」を許可してください", Toast.LENGTH_LONG).show();
-
                 try {
                     Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                     intent.addCategory("android.intent.category.DEFAULT");
                     intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
                     startActivity(intent);
                 } catch (Exception e) {
-                    // 万が一機種によって上記が開けない場合の予備
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
                     startActivity(intent);
                 }
             }
         }
 
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         // --- カメラ権限リクエスト用ランチャー ---
         cameraPermissionLauncher =
                 registerForActivityResult(
                         new ActivityResultContracts.RequestPermission(),
                         isGranted -> {
-                            if (isGranted) {
-                                // 許可されたらカメラを開く
-                                openCamera();
-                            } else {
-                                Toast.makeText(this, "カメラ権限がないため起動できません", Toast.LENGTH_SHORT).show();
-                            }
+                            if (isGranted) openCamera();
+                            else Toast.makeText(this, "カメラ権限がないため起動できません", Toast.LENGTH_SHORT).show();
                         }
                 );
 
-        // カメラ結果を受け取るランチャー
+        // --- カメラ結果を受け取るランチャー ---
         cameraLauncher =
                 registerForActivityResult(
                         new ActivityResultContracts.StartActivityForResult(),
@@ -102,81 +108,53 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
 
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-
-
-        // カメラ起動（結果を受け取る）
-        //  INTENT_ACTION_STILL_IMAGE_CAMERA はただカメラアプリを開くだけなので
-        //  ACTION_IMAGE_CAPTURE の「撮った画像を返してくれる」インテントに変更
+        // --- Cameraボタン ---
         binding.buttonCamera.setOnClickListener(view -> {
-            // 権限があるか確認
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED) {
-                // もう許可されてる → そのままカメラ起動
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED) {
                 openCamera();
             } else {
-                // まだ許可されていない → 権限をリクエスト
                 cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA);
             }
         });
 
-
-
-        /*
-        //画面遷移（FolderActivity）
-        //binding.buttonOpenFolders.setOnClickListener(v ->
-                //startActivity(new Intent(this, FolderActivity.class))
-        //);
-
-         */
-
-        // aiTestボタンを推したらテストページに移動するように
-        // activity_main.xmlファイルのボタンと同様，不要になったら消して下さい
-        binding.aiTestButton.setOnClickListener((view -> {
-            var intent = new Intent(this, AiTest.class);
+        // --- AITestボタン ---
+        binding.aiTestButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AiTest.class);
             startActivity(intent);
-        }));
-
-
-        // ダークモード
-        binding.switch3.setOnClickListener(v ->{
-        boolean isChecked = binding.switch3.isChecked();
-        int tabTextColor;
-
-        if (isChecked) {
-            // ダークモードに切り替え
-            binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
-//            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.dark_text)); // アプリ名は変えないように
-            binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
-            binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
-            EditText searchEditText = binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-
-
-            tabTextColor = ContextCompat.getColor(this, R.color.dark_text);
-            binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
-        } else {
-            // ライトモードに戻す
-            binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
-//            binding.textView2.setTextColor(ContextCompat.getColor(this, R.color.light_text));
-            binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
-            binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.light_text));
-
-
-            tabTextColor = ContextCompat.getColor(this, R.color.light_text);
-            binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
-        }
         });
-        binding.viewPager.setAdapter(new MainPagerAdapter(this));
 
-        new com.google.android.material.tabs.TabLayoutMediator(
+        // --- ダークモード（今の君の処理を保持：必要なとこだけ） ---
+        binding.switch3.setOnClickListener(v -> {
+            boolean isChecked = binding.switch3.isChecked();
+            int tabTextColor;
+
+            if (isChecked) {
+                binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
+                binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_background));
+                binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.dark_text));
+
+                EditText searchEditText = binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+                // ここで searchEditText の色変更とかもできる
+
+                tabTextColor = ContextCompat.getColor(this, R.color.dark_text);
+                binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
+
+            } else {
+                binding.getRoot().setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
+                binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.light_background));
+                binding.switch3.setTextColor(ContextCompat.getColor(this, R.color.light_text));
+
+                tabTextColor = ContextCompat.getColor(this, R.color.light_text);
+                binding.tabLayout.setTabTextColors(tabTextColor, tabTextColor);
+            }
+        });
+
+        // --- ViewPager2 & TabLayout ---
+        pagerAdapter = new MainPagerAdapter(this);
+        binding.viewPager.setAdapter(pagerAdapter);
+
+        new TabLayoutMediator(
                 binding.tabLayout,
                 binding.viewPager,
                 (tab, position) -> {
@@ -187,19 +165,71 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         ).attach();
+
+        // =====================
+        // 検索機能の配線（ここから）
+        // =====================
+        searchController = new SearchController();
+
+        // 最初のタブを検索対象に
+        setSearchTargetForPosition(0);
+
+        // SearchView → SearchController
+        binding.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchController.onQueryChanged(newText == null ? "" : newText);
+                return true;
+            }
+        });
+
+
+        // タブ切替で検索対象Fragmentを更新
+        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                setSearchTargetForPosition(position);
+                // 現在の検索文字を新しいタブにも反映（したい場合）
+                searchController.onQueryChanged(binding.searchView.getQuery().toString());
+            }
+        });
     }
-    static class MainPagerAdapter extends androidx.viewpager2.adapter.FragmentStateAdapter {
-        public MainPagerAdapter(AppCompatActivity activity) { super(activity); }
-        @Override public int getItemCount() { return 3; }
-        @Override public androidx.fragment.app.Fragment createFragment(int position) {
-            if (position == 0) return new FolderFragment();   // ← ココがカテゴリ
-            else if (position == 1) return new RecentFragment(); // ダミーでもOK
-            else return new OtherFragment();                    // ダミーでもOK
-        }
+
+    private void setSearchTargetForPosition(int position) {
+        Fragment f = pagerAdapter.getFragment(position);
+        if (f instanceof Searchable) searchController.setTarget((Searchable) f);
+        else searchController.setTarget(null);
     }
 
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraLauncher.launch(intent);
+    }
+
+    // ViewPager2 Adapter（Fragmentを保持するので、検索対象を確実に取れる）
+    static class MainPagerAdapter extends FragmentStateAdapter {
+
+        private final Fragment[] fragments = new Fragment[] {
+                new FolderFragment(),   // カテゴリ
+                new RecentFragment(),   // 最近
+                new OtherFragment()     // その他
+        };
+
+        public MainPagerAdapter(AppCompatActivity activity) { super(activity); }
+
+        @Override public int getItemCount() { return fragments.length; }
+
+        @Override public Fragment createFragment(int position) {
+            return fragments[position];
+        }
+
+        public Fragment getFragment(int position) {
+            return fragments[position];
+        }
     }
 }
