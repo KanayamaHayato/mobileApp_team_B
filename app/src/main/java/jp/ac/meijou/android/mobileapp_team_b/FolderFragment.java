@@ -27,11 +27,20 @@ import java.util.List;
 
 import jp.ac.meijou.android.mobileapp_team_b.databinding.FragmentFolderBinding;
 
-public class FolderFragment extends Fragment {
+public class FolderFragment extends Fragment implements Searchable {
 
     private FragmentFolderBinding binding;
+
+    // 表示用（RecyclerViewが見るリスト）
     private final List<Bucket> data = new ArrayList<>();
+
+    // 検索の元になる全件保持用
+    private final List<Bucket> allData = new ArrayList<>();
+
     private BucketAdapter adapter;
+
+    // 現在の検索文字（タブ切替・再読み込み時に再適用するため）
+    private String currentQuery = "";
 
     // どの権限が必要かを判断(バージョンによって違うため)
     private String readImagesPermission() {
@@ -44,14 +53,17 @@ public class FolderFragment extends Fragment {
             registerForActivityResult(new ActivityResultContracts.RequestPermission(),
                     granted -> { if (granted) loadBuckets(); });
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentFolderBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
-    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         adapter = new BucketAdapter(requireContext(), data, bucket -> {
             // ここで PhotoGridActivity へ遷移（そのまま流用可）
             startActivity(new android.content.Intent(requireContext(), PhotoGridActivity.class)
@@ -65,15 +77,14 @@ public class FolderFragment extends Fragment {
         // ＋ボタンを押したときの処理
         binding.folderAddButton.setOnClickListener(v -> showCreateFolderDialog());
 
-        //onResumeで実行しているため必要なくなった(2回実行してしまい，エラーにはならないが無駄)
-//        ensurePermissionAndLoad();
+        // onResumeで更新するのでここでは呼ばない
+        // ensurePermissionAndLoad();
     }
 
     // アプリ起動時及びホーム画面に戻ってきたときに自動実行(更新)
     @Override
     public void onResume() {
         super.onResume();
-        // データを再読み込みする
         ensurePermissionAndLoad();
 
         if (adapter != null) {
@@ -85,7 +96,6 @@ public class FolderFragment extends Fragment {
         if (adapter != null) adapter.notifyDataSetChanged();
     }
 
-
     // 必要な権限を持っているかを確認(無ければポップアップを出して要求)
     private void ensurePermissionAndLoad() {
         if (ContextCompat.checkSelfPermission(requireContext(), readImagesPermission())
@@ -96,31 +106,64 @@ public class FolderFragment extends Fragment {
         }
     }
 
+    // ==========
+    // ここから検索対応（Searchable）
+    // ==========
+    @Override
+    public void onSearchQueryChanged(String query) {
+        currentQuery = (query == null) ? "" : query;
+        applyFilter();
+    }
+
+    private void applyFilter() {
+        if (adapter == null) return;
+
+        String q = currentQuery.trim().toLowerCase();
+
+        data.clear();
+        if (q.isEmpty()) {
+            data.addAll(allData);
+        } else {
+            for (Bucket b : allData) {
+                if (b.bucketName != null && b.bucketName.toLowerCase().contains(q)) {
+                    data.add(b);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+    // ==========
+    // 検索対応ここまで
+    // ==========
+
     private void loadBuckets() {
         new Thread(() -> {
             List<Bucket> list = MediaStoreHelper.queryBuckets(requireContext());
+
             // "Trash" 以外だけを集めた新しいリストを作る
             List<Bucket> filteredList = new ArrayList<>();
             for (Bucket b : list) {
-                // 名前が "Trash" (大文字小文字無視) じゃなければリストに入れる
                 if (!b.bucketName.equalsIgnoreCase("Trash")) {
                     filteredList.add(b);
                 }
             }
 
             requireActivity().runOnUiThread(() -> {
-                data.clear();
-                data.addAll(filteredList);
-                adapter.notifyDataSetChanged();
+                // ✅ 元データ（全件）を更新
+                allData.clear();
+                allData.addAll(filteredList);
+
+                // ✅ 現在の検索文字で表示を作り直す
+                applyFilter();
             });
         }).start();
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 
     // フォルダ新規作成時，名前を入力するダイアログを表示
     private void showCreateFolderDialog() {
@@ -132,7 +175,6 @@ public class FolderFragment extends Fragment {
                 .setView(input)
                 .setPositiveButton("作成", (dialog, which) -> {
                     String name = input.getText().toString();
-                    // 名前を入力した上で"作成"を押したらフォルダを新規作成
                     if (!name.isEmpty()) {
                         createNewFolder(name);
                     }
@@ -159,12 +201,9 @@ public class FolderFragment extends Fragment {
             }
 
             if (isVisible) {
-                // 画面にもあるなら、本当に重複なのでエラーにして終了
                 Toast.makeText(requireContext(), "そのフォルダは既にリストにあります", Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                // 物理的にはあるが画面にはない(空フォルダで再起動後など)場合
-                // 作成処理(mkdirs)はスキップして、下の「リスト追加処理」だけ行わせるためにスルーする
                 Toast.makeText(requireContext(), "既存のフォルダを再表示します", Toast.LENGTH_SHORT).show();
             }
 
@@ -179,17 +218,18 @@ public class FolderFragment extends Fragment {
         }
 
         // --- 以下、リストへの追加処理（新規作成時・再表示時 共通） ---
+        // 画像がないのでMediaStoreからは自動で読み込まれないため、手動でBucketを作って足す
+        Bucket newBucket = new Bucket();
+        newBucket.bucketName = folderName;
+        newBucket.bucketId = "MANUAL_" + folderName; // 仮のID
+        newBucket.count = 0; // 空っぽなので0枚
+        newBucket.coverUri = null; // 画像がないので表紙もなし
 
-        //  画面のリストに手動で追加する
-        // (注意: 画像がないのでMediaStoreからは自動で読み込まれないため、手動でBucketを作って足す)
-            Bucket newBucket = new Bucket();
-            newBucket.bucketName = folderName;
-            newBucket.bucketId = "MANUAL_" + folderName; // 仮のID
-            newBucket.count = 0; // 空っぽなので0枚
-            newBucket.coverUri = null; // 画像がないので表紙もなし
+        // ✅ 元データにも追加して、検索状態に応じて表示を更新
+        allData.add(0, newBucket);
+        applyFilter();
 
-        data.add(0, newBucket); // リストの一番上に追加
-        adapter.notifyItemInserted(0); // 画面更新
-        binding.recyclerBuckets.scrollToPosition(0); // 一番上までスクロール
+        // 一番上までスクロール（検索で0件の時は意味ないので注意）
+        binding.recyclerBuckets.scrollToPosition(0);
     }
 }

@@ -88,12 +88,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="39dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="検索"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="12dp"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -129,36 +133,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonCamera"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
+    android:id="@+id/buttonCamera"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/gp_button"
+    android:layout_marginBottom="30dp"
+    android:text="  Camera  "
+    android:textColor="#FFFFFF"
+    android:textSize="15sp"
+    app:cornerRadius="25dp"
+    app:strokeColor="@color/gp_button_stroke"
+    app:strokeWidth="2dp"
+    app:icon="@drawable/camera"
+    app:iconTint="#FFFFFF"
+    app:layout_constraintBottom_toTopOf="@id/switch3"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
 
-        android:backgroundTint="@color/gp_button"
-        android:layout_marginBottom="30dp"
 
-        android:text="  Camera  "
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-
-        app:cornerRadius="25dp"
-        app:strokeColor="@color/gp_button_stroke"
-        app:strokeWidth="2dp"
-
-        app:icon="@drawable/camera"
-        app:iconTint="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@id/switch3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:rippleColor="#E6E2EF" />
-
-<!--    AIの動作を確認するためのページに飛ぶボタンです　不要になったら消して下さい-->
     <Button
         android:id="@+id/aiTestButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AITest"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-         />
+
+        android:backgroundTint="#664FA3"
+        android:textColor="#FFFFFF"
+
+        app:cornerRadius="25dp"
+
+        app:layout_constraintBottom_toBottomOf="@id/buttonCamera"
+        app:layout_constraintTop_toTopOf="@id/buttonCamera"
+        app:layout_constraintEnd_toStartOf="@id/buttonCamera"
+
+        android:layout_marginEnd="12dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
