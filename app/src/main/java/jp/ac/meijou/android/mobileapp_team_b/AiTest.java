@@ -3,6 +3,7 @@ package jp.ac.meijou.android.mobileapp_team_b;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -51,6 +52,11 @@ public class AiTest extends AppCompatActivity {
 
     // 判定されたラベル名を保持しておく変数
     private String detectedLabelName = null;
+    // 2回押し防止用のフラグ
+    private boolean isSaved = false;
+
+    // 選択中の画像のURI（元々どのフォルダにいたか調べる用）
+    private Uri currentUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,9 @@ public class AiTest extends AppCompatActivity {
                                 Uri uri = result.getData().getData();
                                 if (uri != null) {
                                     try {
+                                        // 選んだ画像のURIを保持しておく
+                                        currentUri = uri;
+
                                         InputStream inputStream = getContentResolver().openInputStream(uri);
                                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                         if (inputStream != null) {
@@ -128,13 +137,40 @@ public class AiTest extends AppCompatActivity {
 
 
         // 判定された画像をフォルダに移動するボタンの動作
-        binding.addFolderButton.setOnClickListener((view ->{
+        binding.addFolderButton.setOnClickListener(view -> {
             if (selectedBitmap != null && detectedLabelName != null) {
+
+                // 対策1: すでに保存済みなら処理しない
+                if (isSaved) {
+                    Toast.makeText(this, "すでに移動しています", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 対策2: 移動先フォルダと現在のフォルダが同じなら保存しない
+                String targetFolderName = sanitizeFolderName(detectedLabelName); // AIが出したフォルダ名
+
+                if (currentUri != null) {
+                    // 元画像のフォルダ名を取得
+                    String currentFolderName = getBucketNameFromUri(currentUri);
+
+                    if (currentFolderName != null && currentFolderName.equalsIgnoreCase(targetFolderName)) {
+                        Toast.makeText(this, "すでに「" + targetFolderName + "」フォルダにあります", Toast.LENGTH_SHORT).show();
+                        isSaved = true; // これ以上押せないように保存済みにする
+                        return;
+                    }
+                }
+
+                // 問題なければ保存実行
                 saveImageToFolder(selectedBitmap, detectedLabelName);
+
+                // ★追加: 保存完了フラグを立てる
+                isSaved = true;
+                binding.addFolderButton.setText("移動完了"); // ボタンの文字を変えるとより親切
+
             } else {
                 Toast.makeText(this, "先にAI判定を行ってください", Toast.LENGTH_SHORT).show();
             }
-        }));
+        });
 
 
         // システムバー分だけパディング
@@ -172,6 +208,10 @@ public class AiTest extends AppCompatActivity {
         detectedLabelName = null;
         binding.AISampleResultText.setText("判定ボタンを押してください");
         binding.addFolderButton.setEnabled(false); // ボタンを押せないようにする
+
+        // リセット時は保存フラグを下ろす
+        isSaved = false;
+        binding.addFolderButton.setText("判定されたフォルダへ移動");
     }
 
 
@@ -220,6 +260,10 @@ public class AiTest extends AppCompatActivity {
 
             // 判定結果を変数に保存し、ボタンを有効化する
             detectedLabelName = labelName; // 例: "cat"
+
+            // 再判定したら保存ボタン復活」とする
+            isSaved = false;
+            binding.addFolderButton.setText("判定されたフォルダへ移動");
             binding.addFolderButton.setEnabled(true); // 保存ボタンを押せるようにする
 
             String resultText = "予測: " + labelIndex + " , " + labelName
@@ -232,11 +276,34 @@ public class AiTest extends AppCompatActivity {
         }
     }
 
+    // フォルダ名用の文字列整形（記号削除など）を共通化
+    private String sanitizeFolderName(String name) {
+        String safe = name.replaceAll("[^a-zA-Z0-9_\\- ]", "");
+        return safe.isEmpty() ? "Other" : safe;
+    }
+
+    // 画像のURIから「フォルダ名(Bucket Display Name)」を取得するメソッド
+    private String getBucketNameFromUri(Uri uri) {
+        String bucketName = null;
+        String[] projection = {MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
+
+        try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                // 列インデックスを取得して文字列を取り出す
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                bucketName = cursor.getString(columnIndex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bucketName;
+    }
+
     // 画像を指定したフォルダ名のフォルダに保存するメソッド
     private void saveImageToFolder(Bitmap bitmap, String folderName) {
         // フォルダ名に使えない文字などを除去（念のため）
-        String safeFolderName = folderName.replaceAll("[^a-zA-Z0-9_\\- ]", "");
-        if (safeFolderName.isEmpty()) safeFolderName = "Other";
+        // 共通メソッドを使う
+        String safeFolderName = sanitizeFolderName(folderName);
 
         // 保存するファイル名を作成 (例: cat_123456789.jpg)
         String fileName = safeFolderName + "_" + System.currentTimeMillis() + ".jpg";
