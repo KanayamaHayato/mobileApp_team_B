@@ -126,11 +126,32 @@ public class FolderFragment extends Fragment implements Searchable {
                 // スワイプ削除は今回実装しないので何もしない
             }
 
+            // ドラッグが始まった瞬間の処理 (拡大する)
+            @Override
+            public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+                super.onSelectedChanged(viewHolder, actionState);
+
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
+                    // 1.1倍 (10%大きく) にアニメーションさせる
+                    viewHolder.itemView.animate().scaleX(1.03f).scaleY(1.1f).setDuration(200).start();
+
+                    // 少し透明度を下げて「浮いている感」を出す
+                     viewHolder.itemView.setAlpha(0.9f);
+                }
+            }
+
             // ドラッグ操作が終わった（指を離した）ときに保存を実行
             @Override
             public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
-                // 検索中じゃないときだけ保存
+
+                // サイズを元の 1.0倍 に戻す
+                viewHolder.itemView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(200).start();
+
+                // 透明度をここでもとに戻す
+                 viewHolder.itemView.setAlpha(1.0f);
+
+                // --- 以前追加した保存処理 ---
                 if (currentQuery.isEmpty()) {
                     saveFolderOrder();
                 }
