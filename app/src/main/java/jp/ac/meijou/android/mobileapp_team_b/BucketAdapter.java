@@ -90,4 +90,17 @@ public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
     }
 
     @Override public int getItemCount() { return items.size(); }
+
+
+    /**
+     * アイテムの並び順を入れ替えるメソッド
+     * FolderFragment から呼ばれます
+     */
+    public void moveItem(int fromPosition, int toPosition) {
+        Bucket fromItem = items.get(fromPosition);
+        items.remove(fromPosition);
+        items.add(toPosition, fromItem);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
 }
