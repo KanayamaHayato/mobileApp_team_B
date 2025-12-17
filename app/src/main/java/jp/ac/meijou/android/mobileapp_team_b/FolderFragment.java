@@ -51,11 +51,8 @@ public class FolderFragment extends Fragment implements Searchable {
     private final List<Bucket> allData = new ArrayList<>();
 
     private BucketAdapter adapter;
-
-    // 現在の検索文字（タブ切替・再読み込み時に再適用するため）
     private String currentQuery = "";
 
-    // どの権限が必要かを判断(バージョンによって違うため)
     private String readImagesPermission() {
         return Build.VERSION.SDK_INT >= 33
                 ? Manifest.permission.READ_MEDIA_IMAGES
@@ -78,7 +75,6 @@ public class FolderFragment extends Fragment implements Searchable {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         adapter = new BucketAdapter(requireContext(), data, bucket -> {
-            // ここで PhotoGridActivity へ遷移（そのまま流用可）
             startActivity(new android.content.Intent(requireContext(), PhotoGridActivity.class)
                     .putExtra("bucketId", bucket.bucketId)
                     .putExtra("bucketName", bucket.bucketName));
@@ -170,34 +166,27 @@ public class FolderFragment extends Fragment implements Searchable {
 
     }
 
-    // アプリ起動時及びホーム画面に戻ってきたときに自動実行(更新)
     @Override
     public void onResume() {
         super.onResume();
         ensurePermissionAndLoad();
-
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 
     public void refreshTheme() {
         if (adapter != null) adapter.notifyDataSetChanged();
     }
 
-    // 必要な権限を持っているかを確認(無ければポップアップを出して要求)
     private void ensurePermissionAndLoad() {
         if (ContextCompat.checkSelfPermission(requireContext(), readImagesPermission())
                 == PackageManager.PERMISSION_GRANTED) {
             loadBuckets();
         } else {
-            reqReadPerm.launch(readImagesPermission()); // 画像を読み込む
+            reqReadPerm.launch(readImagesPermission());
         }
     }
 
-    // ==========
-    // ここから検索対応（Searchable）
-    // ==========
+    // ===== 検索 =====
     @Override
     public void onSearchQueryChanged(String query) {
         currentQuery = (query == null) ? "" : query;
@@ -221,18 +210,15 @@ public class FolderFragment extends Fragment implements Searchable {
         }
         adapter.notifyDataSetChanged();
     }
-    // ==========
-    // 検索対応ここまで
-    // ==========
 
     private void loadBuckets() {
         new Thread(() -> {
             List<Bucket> list = MediaStoreHelper.queryBuckets(requireContext());
 
-            // "Trash" 以外だけを集めた新しいリストを作る
             List<Bucket> filteredList = new ArrayList<>();
             for (Bucket b : list) {
-                if (!b.bucketName.equalsIgnoreCase("Trash")) {
+                // ★ null安全に
+                if (b.bucketName != null && !b.bucketName.equalsIgnoreCase("Trash")) {
                     filteredList.add(b);
                 }
             }
@@ -241,11 +227,8 @@ public class FolderFragment extends Fragment implements Searchable {
             sortBucketsBySavedOrder(filteredList);
 
             requireActivity().runOnUiThread(() -> {
-                // ✅ 元データ（全件）を更新
                 allData.clear();
                 allData.addAll(filteredList);
-
-                // ✅ 現在の検索文字で表示を作り直す
                 applyFilter();
             });
         }).start();
@@ -257,7 +240,14 @@ public class FolderFragment extends Fragment implements Searchable {
         binding = null;
     }
 
-    // フォルダ新規作成時，名前を入力するダイアログを表示
+    // ==========================
+    // ★ MainActivityから呼ぶ用
+    // ==========================
+    public void requestCreateFolder() {
+        showCreateFolderDialog();
+    }
+
+    // フォルダ新規作成ダイアログ
     private void showCreateFolderDialog() {
         EditText input = new EditText(requireContext());
         input.setHint("フォルダ名を入力");
@@ -266,7 +256,7 @@ public class FolderFragment extends Fragment implements Searchable {
                 .setTitle("新しいフォルダを作成")
                 .setView(input)
                 .setPositiveButton("作成", (dialog, which) -> {
-                    String name = input.getText().toString();
+                    String name = input.getText().toString().trim();
                     if (!name.isEmpty()) {
                         createNewFolder(name);
                     }
@@ -275,54 +265,39 @@ public class FolderFragment extends Fragment implements Searchable {
                 .show();
     }
 
-    // 実際にフォルダを新規作成してリストに追加する
     private void createNewFolder(String folderName) {
         File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File newFolder = new File(picturesDir, folderName);
 
-        // 1. まず、物理的にフォルダが存在するか確認
-        if (newFolder.exists()) {
-
-            // 2. 存在する場合、「画面のリスト(data)」に既に含まれているかチェック
-            boolean isVisible = false;
-            for (Bucket bucket : data) {
-                if (bucket.bucketName.equals(folderName)) {
-                    isVisible = true;
-                    break;
-                }
-            }
-
-            if (isVisible) {
+        // ★ 重複チェックは allData で（検索中でも正しく判定）
+        for (Bucket bucket : allData) {
+            if (bucket.bucketName != null && bucket.bucketName.equals(folderName)) {
                 Toast.makeText(requireContext(), "そのフォルダは既にリストにあります", Toast.LENGTH_SHORT).show();
                 return;
-            } else {
-                Toast.makeText(requireContext(), "既存のフォルダを再表示します", Toast.LENGTH_SHORT).show();
             }
+        }
 
-        } else {
-            // 物理的に存在しない場合のみ、作成を実行
+        if (!newFolder.exists()) {
             boolean created = newFolder.mkdirs();
             if (!created) {
                 Toast.makeText(requireContext(), "フォルダ作成に失敗しました", Toast.LENGTH_SHORT).show();
                 return;
             }
             Toast.makeText(requireContext(), "作成しました: " + folderName, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(requireContext(), "既存のフォルダを再表示します", Toast.LENGTH_SHORT).show();
         }
 
-        // --- 以下、リストへの追加処理（新規作成時・再表示時 共通） ---
-        // 画像がないのでMediaStoreからは自動で読み込まれないため、手動でBucketを作って足す
         Bucket newBucket = new Bucket();
         newBucket.bucketName = folderName;
-        newBucket.bucketId = "MANUAL_" + folderName; // 仮のID
-        newBucket.count = 0; // 空っぽなので0枚
-        newBucket.coverUri = null; // 画像がないので表紙もなし
+        newBucket.bucketId = "MANUAL_" + folderName;
+        newBucket.count = 0;
+        newBucket.coverUri = null;
 
-        // ✅ 元データにも追加して、検索状態に応じて表示を更新
         allData.add(0, newBucket);
         applyFilter();
 
-        // 一番上までスクロール（検索で0件の時は意味ないので注意）
-        binding.recyclerBuckets.scrollToPosition(0);
+        if (binding != null) binding.recyclerBuckets.scrollToPosition(0);
     }
 
     // ★追加: 現在のリストの並び順を保存する
@@ -374,3 +349,4 @@ public class FolderFragment extends Fragment implements Searchable {
         }
     }
 }
+
