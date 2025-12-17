@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout mainLayout;
     private View topBackground;
     private MaterialButton cameraButton;
+    private MaterialButton AIButton;
     private Switch themeSwitch;
 
     // 検索用（master側）
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         mainLayout = binding.main;
         topBackground = binding.topBackground;
         cameraButton = binding.buttonCamera;
+        AIButton = binding.aiTestButton;
         themeSwitch = binding.switch3;
 
         setGreenPurpleTheme();
@@ -149,6 +151,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
+
+        binding.folderAddButton.setOnClickListener(v -> {
+            Fragment f = pagerAdapter.getFragment(0);
+            if (f instanceof FolderFragment) {
+                ((FolderFragment) f).requestCreateFolder();
+            }
+        });
 
         // Cameraボタン
         binding.buttonCamera.setOnClickListener(view -> {
@@ -236,6 +245,8 @@ public class MainActivity extends AppCompatActivity {
 
         cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
         cameraButton.setStrokeColor(ColorStateList.valueOf(stroke));
+        AIButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        AIButton.setStrokeColor(ColorStateList.valueOf(stroke));
     }
 
     // 青ピンクテーマ
@@ -251,6 +262,8 @@ public class MainActivity extends AppCompatActivity {
 
         cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
         cameraButton.setStrokeColor(ColorStateList.valueOf(stroke));
+        AIButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        AIButton.setStrokeColor(ColorStateList.valueOf(stroke));
     }
 
     // Fragmentを保持するAdapter（検索対象を確実に取れる）
