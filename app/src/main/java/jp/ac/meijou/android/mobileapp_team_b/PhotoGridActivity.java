@@ -47,6 +47,9 @@ public class PhotoGridActivity extends AppCompatActivity {
 
     private boolean isTrashFolder = false; // ごみ箱フォルダか否か
     private static final int REQUEST_DELETE_ALL = 200; // 削除許可用の番号
+    // 現在のフォルダ名を保存しておく変数
+    private String currentBucketName;
+
 
     @Override // フォルダ一覧画面（FolderFragment）でタップされたフォルダの情報を受け取る
     protected void onCreate(Bundle b) {
@@ -55,6 +58,10 @@ public class PhotoGridActivity extends AppCompatActivity {
 
         String bucketId = getIntent().getStringExtra("bucketId");
         String bucketName = getIntent().getStringExtra("bucketName");
+
+        // クラス変数に保存する
+        this.currentBucketName = bucketName;
+
         setTitle(bucketName == null ? "Photos" : bucketName);
 
         // Trashフォルダかどうかを判定
@@ -238,47 +245,65 @@ public class PhotoGridActivity extends AppCompatActivity {
 
     // 移動先のフォルダを選ぶダイアログを表示
     private void showMoveDialog(Uri imageUri, int position) {
-        // 1. まずは既存のデータベースからフォルダを探す（画像が入っているフォルダ）
-        List<Bucket> buckets = MediaStoreHelper.queryBuckets(this);
+        new Thread(() -> {
+            // 1. まずは既存のデータベースからフォルダを探す
+            List<Bucket> allBuckets = MediaStoreHelper.queryBuckets(this);
 
-        // 2. 重複を防ぐために、名前のリストを作っておく
-        Set<String> existingNames = new HashSet<>();
-        for (Bucket b : buckets) {
-            existingNames.add(b.bucketName);
-        }
+            // 2. 重複を防ぐために、名前のリストを作っておく
+            Set<String> existingNames = new HashSet<>();
+            for (Bucket b : allBuckets) {
+                existingNames.add(b.bucketName);
+            }
 
-        // 3. "Pictures" ディレクトリの中にあるフォルダを直接探しに行く（空のフォルダを見つけるため）
-        File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File[] subFolders = picturesDir.listFiles(File::isDirectory); // フォルダだけ取得
+            // 3. "Pictures" ディレクトリの中にあるフォルダを直接探しに行く（空のフォルダを見つけるため）
+            File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File[] subFolders = picturesDir.listFiles(File::isDirectory);
 
-        if (subFolders != null) {
-            for (File folder : subFolders) {
-                String name = folder.getName();
-                // もしデータベースのリストに含まれていないフォルダがあれば、手動で追加する
-                if (!existingNames.contains(name)) {
-                    Bucket emptyBucket = new Bucket();
-                    emptyBucket.bucketName = name;
-                    emptyBucket.bucketId = "MANUAL_" + name; // IDは適当でOK（移動処理では名前しか使わないため）
-                    buckets.add(emptyBucket);
+            if (subFolders != null) {
+                for (File folder : subFolders) {
+                    String name = folder.getName();
+                    if (!existingNames.contains(name)) {
+                        Bucket emptyBucket = new Bucket();
+                        emptyBucket.bucketName = name;
+                        emptyBucket.bucketId = "MANUAL_" + name;
+                        allBuckets.add(emptyBucket);
+                    }
                 }
             }
-        }
 
-        // 4. ダイアログ表示用のリスト（文字配列）を作成
-        String[] folderNames = new String[buckets.size()];
-        for (int i = 0; i < buckets.size(); i++) {
-            folderNames[i] = buckets.get(i).bucketName;
-        }
+            // 自分自身を除外したリストを作成する
+            List<Bucket> validBuckets = new ArrayList<>();
+            List<String> validNames = new ArrayList<>();
 
-        // 5. ダイアログを表示
-        new AlertDialog.Builder(this)
-                .setTitle("移動先のフォルダを選択")
-                .setItems(folderNames, (dialog, which) -> {
-                    Bucket targetBucket = buckets.get(which);
-                    moveImageFile(imageUri, targetBucket, position);
-                })
-                .setNegativeButton("キャンセル", null)
-                .show();
+            for (Bucket b : allBuckets) {
+                // 現在のフォルダ名(currentBucketName)と違う場合だけリストに入れる
+                if (currentBucketName == null || !b.bucketName.equals(currentBucketName)) {
+                    validBuckets.add(b);
+                    validNames.add(b.bucketName);
+                }
+            }
+
+            // UIスレッドでダイアログを表示
+            runOnUiThread(() -> {
+                // 移動先が一つもない場合の対策
+                if (validNames.isEmpty()) {
+                    Toast.makeText(this, "移動できる他のフォルダがありません", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String[] items = validNames.toArray(new String[0]);
+
+                new AlertDialog.Builder(this)
+                        .setTitle("移動先のフォルダを選択")
+                        .setItems(items, (dialog, which) -> {
+                            // フィルタリング済みのリスト(validBuckets)から選ぶ
+                            Bucket targetBucket = validBuckets.get(which);
+                            moveImageFile(imageUri, targetBucket, position);
+                        })
+                        .setNegativeButton("キャンセル", null)
+                        .show();
+            });
+        }).start();
     }
 
 
