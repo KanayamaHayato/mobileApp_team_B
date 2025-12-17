@@ -16,8 +16,18 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final Context ctx;
     private Bucket trashBucket; // 後からセットする
 
-    public OtherAdapter(Context ctx) {
-        this.ctx = ctx;
+    // クリック時の動作を受け取るためのリスナー変数
+    private final OnItemClickListener listener;
+
+    // リスナーの定義インターフェース
+    public interface OnItemClickListener {
+        void onClick(Bucket bucket);
+    }
+
+    // コンストラクタでリスナーを受け取るように変更
+    public OtherAdapter(Context context, OnItemClickListener listener) {
+        this.ctx = context;
+        this.listener = listener;
     }
 
     public void setTrashBucket(Bucket b) {
@@ -77,6 +87,13 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             h.inner.imgCover.setImageResource(android.R.drawable.ic_menu_delete);
             h.inner.imgCover.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
             h.inner.imgCover.setBackgroundColor(android.graphics.Color.LTGRAY);
+
+            // クリック時の処理
+            h.itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onClick(b);
+                }
+            });
 
         } else {
             // Theme行：今は「表示だけ」なので何もしない
