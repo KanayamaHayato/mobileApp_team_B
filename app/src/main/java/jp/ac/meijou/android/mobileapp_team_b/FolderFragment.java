@@ -32,11 +32,14 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.ac.meijou.android.mobileapp_team_b.databinding.FragmentFolderBinding;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Arrays;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -61,7 +64,9 @@ public class FolderFragment extends Fragment implements Searchable {
 
     private final ActivityResultLauncher<String> reqReadPerm =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(),
-                    granted -> { if (granted) loadBuckets(); });
+                    granted -> {
+                        if (granted) loadBuckets();
+                    });
 
     @Nullable
     @Override
@@ -132,7 +137,7 @@ public class FolderFragment extends Fragment implements Searchable {
                     viewHolder.itemView.animate().scaleX(1.03f).scaleY(1.1f).setDuration(200).start();
 
                     // 少し透明度を下げて「浮いている感」を出す
-                     viewHolder.itemView.setAlpha(0.9f);
+                    viewHolder.itemView.setAlpha(0.9f);
                 }
             }
 
@@ -145,7 +150,7 @@ public class FolderFragment extends Fragment implements Searchable {
                 viewHolder.itemView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(200).start();
 
                 // 透明度をここでもとに戻す
-                 viewHolder.itemView.setAlpha(1.0f);
+                viewHolder.itemView.setAlpha(1.0f);
 
                 // --- 以前追加した保存処理 ---
                 if (currentQuery.isEmpty()) {

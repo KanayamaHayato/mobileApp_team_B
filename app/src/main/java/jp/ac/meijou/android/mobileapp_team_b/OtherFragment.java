@@ -42,7 +42,12 @@ public class OtherFragment extends Fragment {
                 intent.putExtra("bucketName", bucket.bucketName);
                 startActivity(intent);
             }
-        });
+        },() -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).applyThemeFromManager();
+            }
+        }
+        );
         recyclerView.setAdapter(adapter);
     }
 
@@ -51,6 +56,15 @@ public class OtherFragment extends Fragment {
         super.onResume();
         loadTrashBucket();
     }
+
+    public void refreshTheme() {
+        if (recyclerView != null) {
+            recyclerView.post(() -> {
+                if (adapter != null) adapter.notifyDataSetChanged();
+            });
+        }
+    }
+
 
     private void loadTrashBucket() {
         new Thread(() -> {
