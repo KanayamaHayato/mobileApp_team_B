@@ -4,13 +4,18 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+
+import java.util.List;
 
 public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -63,15 +68,14 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     static class ThemeVH extends RecyclerView.ViewHolder {
-        RadioGroup group;
-        MaterialRadioButton rbGreenPurple, rbBluePink;
+        MaterialCardView card;
+        MaterialAutoCompleteTextView dropdown;
 
         ThemeVH(@NonNull View itemView) {
             super(itemView);
-            group = itemView.findViewById(R.id.themeRadioGroup);
-            rbGreenPurple = itemView.findViewById(R.id.rbGreenPurple);
-            rbBluePink = itemView.findViewById(R.id.rbBluePink);}
-
+            card = itemView.findViewById(R.id.themeRoot);
+            dropdown = itemView.findViewById(R.id.themeDropdown);
+        }
     }
 
     @NonNull
@@ -91,17 +95,6 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_TRASH) {
             TrashVH h = (TrashVH) holder;
-
-            int bgRes = ThemeManager.isBluePink()
-                    ? R.color.bp_bucket_background
-                    : R.color.gp_bucket_background;
-
-            View root = h.itemView.findViewById(R.id.bucketRoot);
-            if (root != null) {
-                root.setBackgroundColor(ContextCompat.getColor(ctx, bgRes));
-            } else {
-                h.itemView.setBackgroundColor(ContextCompat.getColor(ctx, bgRes));
-            }
 
             // Trashがまだ無い（ロード前）でも落ちないように仮データ
             Bucket b = (trashBucket != null) ? trashBucket : createPlaceholderTrash();
@@ -124,22 +117,21 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             // Theme行
             ThemeVH h = (ThemeVH) holder;
-            // いまの状態をUIに反映（リスナーを一旦外す：無限ループ防止）
-            h.group.setOnCheckedChangeListener(null);
 
-            if (ThemeManager.isBluePink()) {
-                h.group.check(R.id.rbBluePink);
-            } else {
-                h.group.check(R.id.rbGreenPurple);
-            }
+            List<ThemeOption> themes = ThemeCatalog.getThemes(); // 下で作る
+            ArrayAdapter<ThemeOption> ad = new ArrayAdapter<>(ctx,
+                    android.R.layout.simple_list_item_1, themes);
+            h.dropdown.setAdapter(ad);
 
-            // ここで選択されたらテーマ変更
-            h.group.setOnCheckedChangeListener((group, checkedId) -> {
-                boolean bluePink = (checkedId == R.id.rbBluePink);
-                ThemeManager.setBluePink(bluePink);
+// 初期表示
+            ThemeOption current = themes.get(ThemeManager.getThemeIndex());
+            h.dropdown.setOnItemClickListener(null);
+            h.dropdown.setText(current.name, false);
 
-                // このRecyclerViewを再bindして背景など更新
-                notifyDataSetChanged();
+// 選択時
+            h.dropdown.setOnItemClickListener((parent, view, idx, id) -> {
+                ThemeManager.setThemeIndex(idx);
+                notifyItemChanged(1);              // ★Theme行だけ更新
                 if (onThemeChanged != null) onThemeChanged.run();
             });
         }
