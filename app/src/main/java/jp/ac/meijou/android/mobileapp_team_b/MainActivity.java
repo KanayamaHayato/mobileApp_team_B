@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private View topBackground;
     private MaterialButton cameraButton;
     private MaterialButton AIButton;
-    private Switch themeSwitch;
 
     // 検索用（master側）
     private SearchController searchController;
@@ -94,29 +93,9 @@ public class MainActivity extends AppCompatActivity {
         topBackground = binding.topBackground;
         cameraButton = binding.buttonCamera;
         AIButton = binding.aiTestButton;
-        themeSwitch = binding.switch3;
+
 
         setGreenPurpleTheme();
-        themeSwitch.setChecked(false);
-        themeSwitch.setText("青 × ピンク");
-
-        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            ThemeManager.setBluePink(isChecked);
-
-            if (isChecked) {
-                setBluePinkTheme();
-                themeSwitch.setText("緑 × 紫");
-            } else {
-                setGreenPurpleTheme();
-                themeSwitch.setText("青 × ピンク");
-            }
-
-            // もしフォルダFragmentがテーマ反映メソッド持ってるなら
-            Fragment f = pagerAdapter.getFragment(0);
-            if (f instanceof FolderFragment) {
-                ((FolderFragment) f).refreshTheme();
-            }
-        });
 
         // -----------------------
         // カメラランチャー
@@ -283,5 +262,24 @@ public class MainActivity extends AppCompatActivity {
 
         public Fragment getFragment(int position) { return fragments[position]; }
     }
+
+    public void applyThemeFromManager() {
+        if (ThemeManager.isBluePink()) {
+            setBluePinkTheme();
+        } else {
+            setGreenPurpleTheme();
+        }
+
+        // Fragment 側にも再描画を伝える（任意だが安全）
+        for (Fragment f : getSupportFragmentManager().getFragments()) {
+            if (f instanceof OtherFragment) {
+                ((OtherFragment) f).refreshTheme();
+            }
+            if (f instanceof FolderFragment) {
+                ((FolderFragment) f).refreshTheme();
+            }
+        }
+    }
+
 }
 

@@ -15,6 +15,6 @@
     <color name="bp_title_background">#BBDEFB</color>
     <color name="bp_button">#FF9EC0</color>
     <color name="bp_button_stroke">#FFD6DF</color>
-    <color name="bp_bucket_background">#DDC5DE</color>
+    <color name="bp_bucket_background">#FFC4F5</color>
 
 </resources>

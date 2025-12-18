@@ -4,9 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.radiobutton.MaterialRadioButton;
 
 public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -18,6 +22,8 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     // クリック時の動作を受け取るためのリスナー変数
     private final OnItemClickListener listener;
+    private final Runnable onThemeChanged;
+
 
     // リスナーの定義インターフェース
     public interface OnItemClickListener {
@@ -25,10 +31,11 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     // コンストラクタでリスナーを受け取るように変更
-    public OtherAdapter(Context context, OnItemClickListener listener) {
-        this.ctx = context;
-        this.listener = listener;
-    }
+    public OtherAdapter(Context context,OnItemClickListener listener,Runnable onThemeChanged){
+            this.ctx = context;
+            this.listener = listener;
+            this.onThemeChanged = onThemeChanged;
+        }
 
     public void setTrashBucket(Bucket b) {
         this.trashBucket = b;
@@ -56,7 +63,15 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     static class ThemeVH extends RecyclerView.ViewHolder {
-        ThemeVH(@NonNull View itemView) { super(itemView); }
+        RadioGroup group;
+        MaterialRadioButton rbGreenPurple, rbBluePink;
+
+        ThemeVH(@NonNull View itemView) {
+            super(itemView);
+            group = itemView.findViewById(R.id.themeRadioGroup);
+            rbGreenPurple = itemView.findViewById(R.id.rbGreenPurple);
+            rbBluePink = itemView.findViewById(R.id.rbBluePink);}
+
     }
 
     @NonNull
@@ -77,6 +92,17 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (getItemViewType(position) == TYPE_TRASH) {
             TrashVH h = (TrashVH) holder;
 
+            int bgRes = ThemeManager.isBluePink()
+                    ? R.color.bp_bucket_background
+                    : R.color.gp_bucket_background;
+
+            View root = h.itemView.findViewById(R.id.bucketRoot);
+            if (root != null) {
+                root.setBackgroundColor(ContextCompat.getColor(ctx, bgRes));
+            } else {
+                h.itemView.setBackgroundColor(ContextCompat.getColor(ctx, bgRes));
+            }
+
             // Trashがまだ無い（ロード前）でも落ちないように仮データ
             Bucket b = (trashBucket != null) ? trashBucket : createPlaceholderTrash();
 
@@ -96,7 +122,26 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
         } else {
-            // Theme行：今は「表示だけ」なので何もしない
+            // Theme行
+            ThemeVH h = (ThemeVH) holder;
+            // いまの状態をUIに反映（リスナーを一旦外す：無限ループ防止）
+            h.group.setOnCheckedChangeListener(null);
+
+            if (ThemeManager.isBluePink()) {
+                h.group.check(R.id.rbBluePink);
+            } else {
+                h.group.check(R.id.rbGreenPurple);
+            }
+
+            // ここで選択されたらテーマ変更
+            h.group.setOnCheckedChangeListener((group, checkedId) -> {
+                boolean bluePink = (checkedId == R.id.rbBluePink);
+                ThemeManager.setBluePink(bluePink);
+
+                // このRecyclerViewを再bindして背景など更新
+                notifyDataSetChanged();
+                if (onThemeChanged != null) onThemeChanged.run();
+            });
         }
     }
 
@@ -108,4 +153,5 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         b.coverUri = null;
         return b;
     }
+
 }
