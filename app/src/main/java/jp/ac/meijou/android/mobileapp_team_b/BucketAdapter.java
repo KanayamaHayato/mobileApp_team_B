@@ -12,6 +12,9 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 import jp.ac.meijou.android.mobileapp_team_b.R;
 import jp.ac.meijou.android.mobileapp_team_b.Bucket;
+import jp.ac.meijou.android.mobileapp_team_b.ThemeCatalog;
+import jp.ac.meijou.android.mobileapp_team_b.ThemeOption;
+
 
 public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
 
@@ -45,9 +48,15 @@ public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
     @Override public void onBindViewHolder(@NonNull VH h, int pos) {
         Bucket b = items.get(pos);
         //テーマによる bucket 背景切替
-        int bgRes = ThemeManager.isBluePink()
-                ? R.color.bp_bucket_background
-                : R.color.gp_bucket_background;
+        ThemeOption theme =
+                ThemeCatalog.getThemes().get(ThemeManager.getThemeIndex());
+
+        int bgRes = theme.bucketBg;
+
+        h.bucketRoot.setBackgroundColor(
+                ContextCompat.getColor(ctx, bgRes)
+        );
+
 
         h.bucketRoot.setBackgroundColor(
                 ContextCompat.getColor(ctx, bgRes)

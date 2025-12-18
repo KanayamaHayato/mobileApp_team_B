@@ -34,19 +34,10 @@ public class OtherFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         // クリック時の処理(リスナー)を渡すように変更
-        adapter = new OtherAdapter(requireContext(), bucket -> {
-            // ごみ箱がクリックされたら実行される中身
-            if (bucket != null) {
-                android.content.Intent intent = new android.content.Intent(requireContext(), PhotoGridActivity.class);
-                intent.putExtra("bucketId", bucket.bucketId);
-                intent.putExtra("bucketName", bucket.bucketName);
-                startActivity(intent);
-            }
-        },() -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).applyThemeFromManager();
-            }
-        }
+        adapter = new OtherAdapter(
+                requireContext(),
+                bucket -> { /* Trashクリック時 */ },
+                () -> ((MainActivity) requireActivity()).applyThemeFromManager()
         );
         recyclerView.setAdapter(adapter);
     }
@@ -58,10 +49,15 @@ public class OtherFragment extends Fragment {
     }
 
     public void refreshTheme() {
-        if (recyclerView != null) {
-            recyclerView.post(() -> {
-                if (adapter != null) adapter.notifyDataSetChanged();
-            });
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+        if (getView() != null) {
+            ThemeOption t = ThemeCatalog.getThemes()
+                    .get(ThemeManager.getThemeIndex());
+            getView().setBackgroundColor(
+                    requireContext().getColor(t.appBg)
+            );
         }
     }
 

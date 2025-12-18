@@ -95,7 +95,10 @@ public class MainActivity extends AppCompatActivity {
         AIButton = binding.aiTestButton;
 
 
-        setGreenPurpleTheme();
+        ThemeOption initialTheme =
+                ThemeCatalog.getThemes().get(ThemeManager.getThemeIndex());
+        applyTheme(initialTheme);
+
 
         // -----------------------
         // カメラランチャー
@@ -210,40 +213,16 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraLauncher.launch(intent);
     }
+    //テーマ切り替え用
+    private void applyTheme(ThemeOption t) {
+        binding.main.setBackgroundColor(ContextCompat.getColor(this, t.appBg));
+        binding.topBackground.setBackgroundColor(ContextCompat.getColor(this, t.titleBg));
+        binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, t.titleBg));
 
-    // 緑紫テーマ
-    private void setGreenPurpleTheme() {
-        int bg = ContextCompat.getColor(this, R.color.gp_background);
-        int title = ContextCompat.getColor(this, R.color.gp_title_background);
-        int btn = ContextCompat.getColor(this, R.color.gp_button);
-        int stroke = ContextCompat.getColor(this, R.color.gp_button_stroke);
-
-        binding.main.setBackgroundColor(bg);
-        binding.topBackground.setBackgroundColor(title);
-        binding.tabLayout.setBackgroundColor(title);
-
-        cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
-        cameraButton.setStrokeColor(ColorStateList.valueOf(stroke));
-        AIButton.setBackgroundTintList(ColorStateList.valueOf(btn));
-        AIButton.setStrokeColor(ColorStateList.valueOf(stroke));
+        cameraButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, t.buttonBg)));
+        cameraButton.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, t.buttonStroke)));
     }
 
-    // 青ピンクテーマ
-    private void setBluePinkTheme() {
-        int bg = ContextCompat.getColor(this, R.color.bp_background);
-        int title = ContextCompat.getColor(this, R.color.bp_title_background);
-        int btn = ContextCompat.getColor(this, R.color.bp_button);
-        int stroke = ContextCompat.getColor(this, R.color.bp_button_stroke);
-
-        binding.main.setBackgroundColor(bg);
-        binding.topBackground.setBackgroundColor(title);
-        binding.tabLayout.setBackgroundColor(title);
-
-        cameraButton.setBackgroundTintList(ColorStateList.valueOf(btn));
-        cameraButton.setStrokeColor(ColorStateList.valueOf(stroke));
-        AIButton.setBackgroundTintList(ColorStateList.valueOf(btn));
-        AIButton.setStrokeColor(ColorStateList.valueOf(stroke));
-    }
 
     // Fragmentを保持するAdapter（検索対象を確実に取れる）
     static class MainPagerAdapter extends FragmentStateAdapter {
@@ -263,22 +242,16 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getFragment(int position) { return fragments[position]; }
     }
 
-    public void applyThemeFromManager() {
-        if (ThemeManager.isBluePink()) {
-            setBluePinkTheme();
-        } else {
-            setGreenPurpleTheme();
-        }
 
+    public void applyThemeFromManager() {
         // Fragment 側にも再描画を伝える（任意だが安全）
-        for (Fragment f : getSupportFragmentManager().getFragments()) {
-            if (f instanceof OtherFragment) {
-                ((OtherFragment) f).refreshTheme();
-            }
-            if (f instanceof FolderFragment) {
-                ((FolderFragment) f).refreshTheme();
-            }
-        }
+        ThemeOption t = ThemeCatalog.getThemes().get(ThemeManager.getThemeIndex());
+        applyTheme(t); // ★ MainActivity側も塗り直す
+
+        ((FolderFragment) pagerAdapter.getFragment(0)).refreshTheme();
+        ((RecentFragment) pagerAdapter.getFragment(1)).refreshTheme();
+        ((OtherFragment)  pagerAdapter.getFragment(2)).refreshTheme();
+
     }
 
 }

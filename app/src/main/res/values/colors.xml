@@ -9,6 +9,7 @@
     <color name="gp_button">#664FA3</color>
     <color name="gp_button_stroke">#8A70BA</color>
     <color name="gp_bucket_background">#DEFFE0</color>
+    <color name="gp_text_primary">#000000</color>
 
     <!-- Theme B : 薄い青 + ピンク -->
     <color name="bp_background">#E3F2FD</color>
@@ -16,5 +17,6 @@
     <color name="bp_button">#FF9EC0</color>
     <color name="bp_button_stroke">#FFD6DF</color>
     <color name="bp_bucket_background">#FFC4F5</color>
+    <color name="bp_text_primary">#000000</color>
 
 </resources>

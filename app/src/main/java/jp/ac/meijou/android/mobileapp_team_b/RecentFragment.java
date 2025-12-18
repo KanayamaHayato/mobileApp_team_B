@@ -10,9 +10,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class RecentFragment extends Fragment {
 
+    private RecyclerView.Adapter<?> adapter;
+
+    public void refreshTheme() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+
+        if (getView() != null) {
+            ThemeOption t = ThemeCatalog.getThemes()
+                    .get(ThemeManager.getThemeIndex());
+            getView().setBackgroundColor(
+                    requireContext().getColor(t.appBg)
+            );
+        }
+    }
 
     @Nullable
     @Override
