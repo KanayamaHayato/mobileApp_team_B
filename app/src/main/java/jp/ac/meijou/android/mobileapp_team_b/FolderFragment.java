@@ -89,7 +89,7 @@ public class FolderFragment extends Fragment implements Searchable {
         binding.recyclerBuckets.setAdapter(adapter);
 
         // ＋ボタンを押したときの処理
-        binding.folderAddButton.setOnClickListener(v -> showCreateFolderDialog());
+        //binding.folderAddButton.setOnClickListener(v -> showCreateFolderDialog());
 
         // ドラッグ＆ドロップで並び替えをする処理
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
