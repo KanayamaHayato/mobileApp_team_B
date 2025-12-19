@@ -122,7 +122,7 @@ public class AiTest extends AppCompatActivity {
             selectedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample5);
             binding.AISampleImageView.setImageBitmap(selectedBitmap);
 
-            binding.AISampleResultText.setText("サンプル画像(sample5)で判定します");
+            binding.AISampleResultText.setText("サンプル画像で判定します");
         }
 
         // 「AI判定」ボタン → 今の画像を判定
