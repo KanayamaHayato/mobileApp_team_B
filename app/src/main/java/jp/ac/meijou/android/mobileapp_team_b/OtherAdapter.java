@@ -143,15 +143,16 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     android.R.layout.simple_list_item_1, themes);
             h.dropdown.setAdapter(ad);
 
-// 初期表示
+            // 初期表示
             ThemeOption current = themes.get(ThemeManager.getThemeIndex());
             h.dropdown.setOnItemClickListener(null);
             h.dropdown.setText(current.name, false);
 
-// 選択時
+            // 選択時
             h.dropdown.setOnItemClickListener((parent, view, idx, id) -> {
                 ThemeManager.setThemeIndex(idx);
-                notifyItemChanged(1);              // ★Theme行だけ更新
+                notifyItemChanged(0); // ★Trashカードも更新
+                notifyItemChanged(1); // ★Theme行だけ更新
                 if (onThemeChanged != null) onThemeChanged.run();
             });
         }

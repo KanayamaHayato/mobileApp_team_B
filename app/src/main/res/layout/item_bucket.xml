@@ -25,6 +25,7 @@
             android:layout_marginStart="12dp"
             android:textStyle="bold" android:textSize="16sp"
             android:maxLines="1"
+            android:textColor="#3F3F3F"
             />
 
         <TextView
@@ -33,6 +34,7 @@
             android:layout_toRightOf="@id/imgCover"
             android:layout_below="@id/txtName"
             android:layout_marginStart="12dp"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textColor="#3F3F3F"/>
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>
