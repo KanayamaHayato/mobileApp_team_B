@@ -3,6 +3,7 @@ package jp.ac.meijou.android.mobileapp_team_b;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,9 +19,12 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.label.Category;
@@ -65,6 +69,9 @@ public class AiTest extends AppCompatActivity {
 
         binding = ActivityAiTestBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        //テーマ切り替えのやつ
+        applyTheme();
+
 
         // ==== ギャラリーランチャーの初期化（super のあと！） ====
         pickImageLauncher =
@@ -344,4 +351,38 @@ public class AiTest extends AppCompatActivity {
             }
         }
     }
+    //AItest用のテーマ切り替えクラス
+
+    private void applyTheme() {
+        ThemeOption t = ThemeCatalog.getThemes()
+                .get(ThemeManager.getThemeIndex());
+
+        // 背景色
+        int bg = ContextCompat.getColor(this, t.appBg);
+
+        // ボタン色
+        int btn = ContextCompat.getColor(this, t.buttonBg);
+        int stroke = ContextCompat.getColor(this, t.buttonStroke);//これはふちのこと
+
+        // === 画面全体の背景 ===
+        findViewById(R.id.main).setBackgroundColor(bg);
+
+        // === ボタン背景＋フチ ===
+        binding.AISampleButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        binding.AISampleButton.setStrokeColor(ColorStateList.valueOf(stroke));
+
+        binding.ImagePickButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        binding.ImagePickButton.setStrokeColor(ColorStateList.valueOf(stroke));
+
+        binding.addFolderButton.setBackgroundTintList(ColorStateList.valueOf(btn));
+        binding.addFolderButton.setStrokeColor(ColorStateList.valueOf(stroke));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applyTheme();
+    }
+    //-ここまでテーマ切り替え用
+
 }

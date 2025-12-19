@@ -32,7 +32,7 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/sample5" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/AISampleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="12dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ImagePickButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginStart="12dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/addFolderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
