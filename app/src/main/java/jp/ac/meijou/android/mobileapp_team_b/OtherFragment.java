@@ -33,10 +33,19 @@ public class OtherFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerOther);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // クリック時の処理(リスナー)を渡すように変更
+        // 第2引数のラムダ式の中に、画面遷移の処理を復活
         adapter = new OtherAdapter(
                 requireContext(),
-                bucket -> { /* Trashクリック時 */ },
+                bucket -> {
+                    // ここでごみ箱を開く
+                    if (bucket != null) {
+                        android.content.Intent intent = new android.content.Intent(requireContext(), PhotoGridActivity.class);
+                        intent.putExtra("bucketId", bucket.bucketId);
+                        intent.putExtra("bucketName", bucket.bucketName);
+                        startActivity(intent);
+                    }
+                },
+                // 第3引数は「テーマ変更」の処理
                 () -> ((MainActivity) requireActivity()).applyThemeFromManager()
         );
         recyclerView.setAdapter(adapter);
