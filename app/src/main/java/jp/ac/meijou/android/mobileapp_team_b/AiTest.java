@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -363,19 +364,25 @@ public class AiTest extends AppCompatActivity {
         // ボタン色
         int btn = ContextCompat.getColor(this, t.buttonBg);
         int stroke = ContextCompat.getColor(this, t.buttonStroke);//これはふちのこと
+        //テキスト色
+        int text = ContextCompat.getColor(this, t.textPrimary);
 
         // === 画面全体の背景 ===
         findViewById(R.id.main).setBackgroundColor(bg);
+        binding.AISampleResultText.setTextColor(text);//画面上部の文字の色
 
         // === ボタン背景＋フチ ===
         binding.AISampleButton.setBackgroundTintList(ColorStateList.valueOf(btn));
         binding.AISampleButton.setStrokeColor(ColorStateList.valueOf(stroke));
+        binding.AISampleButton.setTextColor(Color.WHITE);//回りくどいけどこれで無理やり文字を白くします
 
         binding.ImagePickButton.setBackgroundTintList(ColorStateList.valueOf(btn));
         binding.ImagePickButton.setStrokeColor(ColorStateList.valueOf(stroke));
+        binding.ImagePickButton.setTextColor(Color.WHITE);
 
         binding.addFolderButton.setBackgroundTintList(ColorStateList.valueOf(btn));
         binding.addFolderButton.setStrokeColor(ColorStateList.valueOf(stroke));
+        binding.addFolderButton.setTextColor(Color.WHITE);
     }
 
     @Override
