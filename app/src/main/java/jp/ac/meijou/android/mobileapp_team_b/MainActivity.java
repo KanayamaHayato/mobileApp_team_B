@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private View topBackground;
     private MaterialButton cameraButton;
     private MaterialButton AIButton;
+    private MaterialButton folderAddButton;
+
 
     // 検索用（master側）
     private SearchController searchController;
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         topBackground = binding.topBackground;
         cameraButton = binding.buttonCamera;
         AIButton = binding.aiTestButton;
+        folderAddButton  = binding.folderAddButton;
+
 
 
         ThemeOption initialTheme =
@@ -215,12 +219,34 @@ public class MainActivity extends AppCompatActivity {
     }
     //テーマ切り替え用
     private void applyTheme(ThemeOption t) {
-        binding.main.setBackgroundColor(ContextCompat.getColor(this, t.appBg));
-        binding.topBackground.setBackgroundColor(ContextCompat.getColor(this, t.titleBg));
-        binding.tabLayout.setBackgroundColor(ContextCompat.getColor(this, t.titleBg));
+        // 背景系
+        binding.main.setBackgroundColor(
+                ContextCompat.getColor(this, t.appBg)
+        );
+        binding.topBackground.setBackgroundColor(
+                ContextCompat.getColor(this, t.titleBg)
+        );
+        binding.tabLayout.setBackgroundColor(
+                ContextCompat.getColor(this, t.titleBg)
+        );
 
-        cameraButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, t.buttonBg)));
-        cameraButton.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, t.buttonStroke)));
+        // 共通のボタン色
+        ColorStateList btnBg =
+                ColorStateList.valueOf(ContextCompat.getColor(this, t.buttonBg));
+        ColorStateList btnStroke =
+                ColorStateList.valueOf(ContextCompat.getColor(this, t.buttonStroke));
+
+        // Camera
+        cameraButton.setBackgroundTintList(btnBg);
+        cameraButton.setStrokeColor(btnStroke);
+
+        // AI
+        AIButton.setBackgroundTintList(btnBg);
+        AIButton.setStrokeColor(btnStroke);
+
+        // ＋
+        folderAddButton.setBackgroundTintList(btnBg);
+        folderAddButton.setStrokeColor(btnStroke);
     }
 
 

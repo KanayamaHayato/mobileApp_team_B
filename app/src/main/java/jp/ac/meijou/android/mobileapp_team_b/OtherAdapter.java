@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -60,12 +62,20 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     // --- ViewHolders ---
     static class TrashVH extends RecyclerView.ViewHolder {
-        BucketAdapter.VH inner; // 既存のbucket表示レイアウトを再利用したい場合
+        MaterialCardView card;
+        ImageView imgCover;
+        TextView txtName;
+        TextView txtCount;
+
         TrashVH(@NonNull View itemView) {
             super(itemView);
-            inner = new BucketAdapter.VH(itemView);
+            card = itemView.findViewById(R.id.bucketCard); // ← ここ重要
+            imgCover = itemView.findViewById(R.id.imgCover);
+            txtName  = itemView.findViewById(R.id.txtName);
+            txtCount = itemView.findViewById(R.id.txtCount);
         }
     }
+
 
     static class ThemeVH extends RecyclerView.ViewHolder {
         MaterialCardView card;
@@ -96,22 +106,32 @@ public class OtherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (getItemViewType(position) == TYPE_TRASH) {
             TrashVH h = (TrashVH) holder;
 
+            // 現在テーマ
+            ThemeOption t = ThemeCatalog.getThemes()
+                    .get(ThemeManager.getThemeIndex());
+
+            // カード背景（ごみ箱カードの面）
+            h.card.setCardBackgroundColor(
+                    ContextCompat.getColor(ctx, t.bucketBg)
+            );
+
+            // 枠線も変えたいなら（MaterialCardViewのみ）
+            h.card.setStrokeColor(
+                    ContextCompat.getColor(ctx, t.buttonStroke)
+            );
             // Trashがまだ無い（ロード前）でも落ちないように仮データ
             Bucket b = (trashBucket != null) ? trashBucket : createPlaceholderTrash();
 
-            h.inner.txtName.setText(b.bucketName);
-            h.inner.txtCount.setText(b.count + " 枚");
+            h.txtName.setText(b.bucketName);
+            h.txtCount.setText(b.count + " 枚");
 
-            // Trash表示（既存BucketAdapterのロジック簡易版）
-            h.inner.imgCover.setImageResource(android.R.drawable.ic_menu_delete);
-            h.inner.imgCover.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
-            h.inner.imgCover.setBackgroundColor(android.graphics.Color.LTGRAY);
+            // Trashアイコン表示
+            h.imgCover.setImageResource(android.R.drawable.ic_menu_delete);
+            h.imgCover.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            h.imgCover.setBackgroundColor(android.graphics.Color.LTGRAY);
 
-            // クリック時の処理
             h.itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onClick(b);
-                }
+                if (listener != null) listener.onClick(b);
             });
 
         } else {
