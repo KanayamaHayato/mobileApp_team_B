@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.List;
 import jp.ac.meijou.android.mobileapp_team_b.R;
 import jp.ac.meijou.android.mobileapp_team_b.Bucket;
@@ -29,6 +31,7 @@ public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.VH> {
     }
 
     static class VH extends RecyclerView.ViewHolder {
+        public MaterialCardView bucketCard;
         ImageView imgCover; TextView txtName; TextView txtCount; View bucketRoot;
         VH(@NonNull View v) {
             super(v);
